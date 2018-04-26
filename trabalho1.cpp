@@ -44,7 +44,7 @@ int main(int argc, char** argv)
 	string file_entrada = arg1 + ".asm";
 	cout << file_entrada << endl;	//TESTE
 	std::cout << file_exist(teste);	//TESTE
-	if ( !file_exist(argv[2]) )
+	if ( !file_exist(file_entrada) )
 	{
 		printf("Erro! Arquivo não foi encontrado nesse diretório.\n");
 		return 0;

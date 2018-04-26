@@ -40,12 +40,12 @@ int main(int argc, char** argv)
 	}
 
 	//Verifica existência de arquivo
+	string arg1 = argv[1];
+	string file_entrada = arg1 + ".asm";
+	cout << file_entrada << endl;	//TESTE
+	std::cout << file_exist(teste);	//TESTE
 	if ( !file_exist(argv[2]) )
 	{
-		string arg1 = argv[1];
-		string file_entrada = arg1 + ".asm";
-		cout << file_entrada << endl;	//TESTE
-		std::cout << file_exist(teste);	//TESTE
 		printf("Erro! Arquivo não foi encontrado nesse diretório.\n");
 		return 0;
 	}

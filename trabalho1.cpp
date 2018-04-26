@@ -8,6 +8,15 @@
 
 // Como compilar
 
+#include <iostream>
+#include <stdio.h>
+#include <string.h>
+#include <cstdio>
+#include <vector>
+#include <fstream>
+#include <sstream>
+#include <string>
+
 
 using namespace std;
 
@@ -40,10 +49,10 @@ int main(int argc, char** argv)
 	}
 
 	//Verifica existência de arquivo
-	string arg1 = argv[1];
+	string arg1 = argv[2];
 	string file_entrada = arg1 + ".asm";
-	cout << file_entrada << endl;	//TESTE
-	std::cout << file_exist(teste);	//TESTE
+	cout << "Arquivo de entrada: " file_entrada << endl;	//TESTE
+	std::cout << "Arquivo existe: " << file_exist(file_entrada);	//TESTE
 	if ( !file_exist(file_entrada) )
 	{
 		printf("Erro! Arquivo não foi encontrado nesse diretório.\n");
@@ -51,73 +60,27 @@ int main(int argc, char** argv)
 	}
 
 
-	// 2 - INICIALIZAÇÃO DE VARIÁVEIS
- 	const char* file_entrada = argv[2];
- 	const char* file_saida = argv[3];
+	//TODO: criar a variável de file_saida pa usar na chamada das funçoes a seguir
 
-	string spre = "file.pre";
-	string smcr = "file.mcr";
-	const char* file_pre = spre.c_str();
-	const char* file_mcr = smcr.c_str();
-
-
-	//3 - CHAMADA E AVALIAÇÃO DE OPERAÇÕES
+	//CHAMADA E AVALIAÇÃO DE OPERAÇÕES
 	if ( ! strcmp (argv[1], "-p") )
 	{
-		if (  preprocessamento(file_entrada, file_saida) )
-		{
-			printf("\n \n Pré-processamento não pode ser concluído \n");
-			return 0;
-		}
-		printf("\n \n Pré-processamento concluído com sucesso. \n");
+		//TODO: chamar preprocessamento
 		return 0;
 	}	
 	if ( ! strcmp (argv[1], "-m") )
 	{
-		if (  preprocessamento(file_entrada, file_pre) )
-		{
-			printf("\n \n Pré-processamento não pode ser concluído \n");
-			return 0;
-		}
-		printf("\n \n Pré-processamento concluído com sucesso. \n");
-
-
-		if ( macro(file_pre, file_saida) ) 
-		{
-			printf("\n \n Processamento de macros não pode ser concluído \n");
-			return 0;
-		}
-		printf("\n \n Processamento de macros concluído com sucesso. \n");
+		//TODO: chamar preprocesamento
+		//TODO: chamar macro
 		return 0;
 	}	
-
 	if ( ! strcmp (argv[1], "-o") )
 	{
-		if (  preprocessamento(file_entrada, file_pre) )
-		{
-			printf("\n \n Pré-processamento não pode ser concluído \n");
-			return 0;
-		}
-		printf("\n \n Pré-processamento concluído com sucesso. \n");
-
-
-		if ( macro(file_pre, file_mcr) ) 
-		{
-			printf("\n \n Processamento de macros não pode ser concluído \n");
-			return 0;
-		}
-		printf("\n \n Processamento de macros concluído com sucesso. \n");
-		return 0;
-
-		if ( montagem(file_mcr, file_saida) ) 
-		{
-			printf("\n \n Montagem não pode ser concluída \n");
-			return 0;
-		}
-		printf("\n \n Montagem concluída com sucesso. \n");
+		//TODO: chamar preprocesamento
+		//TODO: chamar macro
+		//TODO: chamar montagem
 		return 0;
 	}
-
 	else
 	{
 		printf("\n \n Erro! Tipo de operação deve ser indicado por: -p -m ou -o \n");

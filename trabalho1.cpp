@@ -32,7 +32,9 @@ using namespace std;
  */
 bool file_exist( std::string fileName)
 {
+	fileName = fileName + ".asm" ;
     std::ifstream infile(fileName);
+    cout << "teste : " << endl;
     return infile.good();
 }
 
@@ -447,7 +449,18 @@ int main(int argc, char* argv[]) {
 	//de argumentos mais um.
 	string file_name;
 
+
+
+
 	file_name = argv[2]; // passar para learquivo(). eh o nome do arquivo .asm.
+
+	if (! file_exist(file_name) )
+	{
+		cout << "\nArquivo nao existe nessa pasta!!!\n\n";
+		return 0;
+	}
+
+
 	lerarquivo(argv[2],argv[3]);
 
 	if (string(argv[1])=="-p"){

@@ -32,7 +32,7 @@ using namespace std;
  */
 bool file_exist( std::string fileName)
 {
-	fileName = fileName + ".asm" ;
+	//fileName = fileName + ".asm" ;
     std::ifstream infile(fileName);
     return infile.good();
 }
@@ -95,8 +95,8 @@ string formato_padrao(string line) {
 	return (line);
 }
 
-
-void lerarquivo(char* file_name,char* file_name2 ) { 
+//void lerarquivo(char* file_name,char* file_name2 ) { 
+void lerarquivo(std::string file_name,char* file_name2 ) { 
 	//cout<<nome;
 	//char name[] = {nome};
 	string line;
@@ -105,12 +105,14 @@ void lerarquivo(char* file_name,char* file_name2 ) {
 	string nome,saida,mcr,pontoo;
 	//cout<<file_name2<< endl;
 	nome=file_name2;
+
 	nome=nome.substr(0,nome.size());
+	cout << "nome: " << nome;
 	//nome.append(".pre");
-	cout << nome;
+	//cout << nome;
 
 	saida = nome.substr(0,nome.size())+".pre";
-	//cout << saida << endl;
+	cout << "saida: " << saida << endl;
 	mcr=nome.substr(0,nome.size())+".MCR";
 	//cout << mcr << endl;
 	pontoo=nome.substr(0,nome.size())+".o";
@@ -118,6 +120,7 @@ void lerarquivo(char* file_name,char* file_name2 ) {
 	const char * psaida = saida.c_str();
 	const char * pmcr = mcr.c_str();
 	const char * ppontoo = pontoo.c_str();
+
 
 	//cout<<file_name;
 	ifstream myfile(file_name);
@@ -136,7 +139,6 @@ void lerarquivo(char* file_name,char* file_name2 ) {
 	ofstream mfile("auxiliar", ios::app);
 	if (myfile.is_open())
 	{
-		//cout << "\n";
 		while (getline(myfile, line))
 		{
 			line=filtro_comentarios(line);
@@ -452,16 +454,18 @@ int main(int argc, char* argv[]) {
 
 
 	file_name = argv[2]; // passar para learquivo(). eh o nome do arquivo .asm.
-
-	if ( ! file_exist(file_name) )
+	string file_in = file_name + ".asm";
+	if ( ! file_exist(file_in) )
 	{
-		cout << "\nArquivo nao existe nessa pasta!!!\n\n";
+		cout << "\nArquivo não existe nessa pasta!!!\n\n";
 		return 0;
 	}
 
 
-	lerarquivo(argv[2],argv[3]);
+	//lerarquivo(argv[2],argv[3]);
+	lerarquivo(file_in,argv[3]);
 
+	return 0;
 	if (string(argv[1])=="-p"){
 		pre_procesamento(argv[3]);
 	}else if (string(argv[1])=="-m"){
@@ -482,5 +486,5 @@ int main(int argc, char* argv[]) {
 	}else {
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
-	return 0;
+	//return 0;
 }

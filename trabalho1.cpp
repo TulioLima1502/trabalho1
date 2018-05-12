@@ -1,6 +1,6 @@
 //Codigo em C++ do trabalho de Software Basico
 
-// Desenvolvedores: Túlio Lima e Débora Ferreira dos Santos
+// Desenvolvedores: Túlio Mariano da Silva Lima e Débora Ferreira dos Santos
 
 // Descrição do trabalho 1
 // Objetivos:
@@ -23,13 +23,6 @@
 
 using namespace std;
 
-
-/**
- *@brief Verifica existência de arquivo
- *
- *@param fileName Nome do arquivo
- *
- */
 bool file_exist( std::string fileName)
 {
 	//fileName = fileName + ".asm" ;
@@ -97,19 +90,12 @@ string formato_padrao(string line) {
 
 //void lerarquivo(char* file_name,char* file_name2 ) { 
 void lerarquivo(std::string file_name,char* file_name2 ) { 
-	//cout<<nome;
-	//char name[] = {nome};
 	string line;
-
-
 	string nome,saida,mcr,pontoo;
-	//cout<<file_name2<< endl;
 	nome=file_name2;
 
 	nome=nome.substr(0,nome.size());
-	cout << "nome: " << nome;
-	//nome.append(".pre");
-	//cout << nome;
+	cout << "nome: " << nome << endl;
 
 	saida = nome.substr(0,nome.size())+".pre";
 	cout << "saida: " << saida << endl;
@@ -121,10 +107,9 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 	const char * pmcr = mcr.c_str();
 	const char * ppontoo = pontoo.c_str();
 
-
-	//cout<<file_name;
+	//cout<<file_name<<endl;
 	ifstream myfile(file_name);
-	int achoutext=0, achoudata=0, errosection = 0 ;
+	int achoutext=0, achoudata=0, errosection = 0, erro_ordem_section = 0;
 
 	remove ("auxiliar");
 	remove ("MNT");
@@ -157,11 +142,15 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 			}
 			if (line.find("SECTION DATA")==0){
 				achoudata=1;
+				if (achoutext==0){
+					erro_ordem_section=1;
+				}
 			}
 			if (line.find("SECTION")==0){
 				size_t pos = line.find("SECTION");
 				int tamlinha = line.size();
 				string sectionerrada = line.substr(pos+8,tamlinha);
+				//cout << sectionerrada << endl;
 				if ((sectionerrada.compare("DATA")!=0) && (sectionerrada.compare("TEXT")!=0)){
 					errosection = 1;
 				}
@@ -181,6 +170,9 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 	}
 	if (errosection==1) {
 		cout << "ERRO na difinição do Section" << endl;
+	}
+	if (erro_ordem_section==1){
+		cout << "ERRO, A DIRETIVA 'TEXT' DEVE SEMPRE VIR ANTES DA DIRETIVA 'DATA'" << endl;
 	}
 
 }
@@ -347,7 +339,7 @@ void expande_macro(char* file_name){
 
 void pre_procesamento(char* file_name) {
 	
-
+	cout << "Começando a fazer o pre processamento do arquivo: ";
 	string nome;
 	cout<<file_name << endl;
 	nome=file_name;
@@ -357,7 +349,7 @@ void pre_procesamento(char* file_name) {
 
 
 	string line, nomedamacro, nomeparam, valorparam, nomeequ, valorequ;
-	int fim, posequ, fimequ, remover, teste;
+	int fim, posequ, fimequ, remover, teste, erroequ=0;
 	ifstream meufile("auxiliar");
 	ofstream equfile("EQU",ios::app);
 	ofstream saidafile(nome.append(".pre"),ios::app);
@@ -372,9 +364,6 @@ void pre_procesamento(char* file_name) {
 				cout << "\nTem um EQU aqui\n";
 				fim=line.size();
 
-
-				//No computador do Túlio a próxima linha é -2, no do Barbosa é -1
-
 				valorparam=line[fim-1];
 
 				posequ=line.find(":");
@@ -383,9 +372,8 @@ void pre_procesamento(char* file_name) {
 				//salva na tabela o nome e o valor do parametro
 				if (equfile.is_open())
 				{
-					equfile << nomeparam + "\t"; //o nome desse arquivo é MNT(Macro Name Table)
+					equfile << nomeparam + "\t";
 					equfile << valorparam <<endl;
-					//cout << "tá aqui nesse caralho\n";
 				}
 				else cout << "\nArquivo nao pode ser aberto EQU!!!\n\n";
 
@@ -395,10 +383,10 @@ void pre_procesamento(char* file_name) {
 				size_t posif=line.find("IF");
 				nomeparam=line.substr(posif+3,fim);
 				teste = nomeparam.size();
-				nomeparam=line.substr(3,teste);  // No PC do tulio: teste-1. No do barbosa: teste.
-				cout << line << endl;	
-				cout << nomeparam << endl;
-				cout << nomeparam.size() << endl;
+				nomeparam=line.substr(3,teste);
+				//cout << line << endl;	
+				//cout << nomeparam << endl;
+				//cout << nomeparam.size() << endl;
 				ifstream equfile("EQU");				
  				if(equfile.is_open()){
 					while(getline(equfile,line)){
@@ -409,9 +397,9 @@ void pre_procesamento(char* file_name) {
 						fimequ=line.size();
 						valorequ=line[fimequ-1];
 						//line.substr(posequ,fim);
-						cout << nomeequ.size() << endl;
-						cout << valorequ.size() << endl;
-						//olha na tabela de EQU procurando o valor que está logo após o IF
+						//cout << nomeequ.size() << endl;
+						//cout << valorequ.size() << endl;
+						//olha na tabela de EQU procurando o valor que está logo após o IF(0 ou 1)
 						if(nomeequ.compare(nomeparam)==0){
 							//parametro existe na tabela e podemos verificar o seu valor
 							cout << nomeequ << endl;
@@ -420,21 +408,25 @@ void pre_procesamento(char* file_name) {
 							//verifica o valor de nomeequ
 							if(valorequ=="1"){
 								remover=0;
+								erroequ=1;
 								getline(meufile,line);
 								saidafile << line << endl;
 							}else if(valorequ=="0"){
 								remover=1;
-								cout << remover << endl;
+								erroequ=1;
+								cout << "Remover: " << remover << endl;
 								getline(meufile,line);
 							}
 							//se for 1 adiciona a linha posterior ao if
 							//se for 0 remove a linha posterior ao if
-							//caso o valor não esteja na tabela, retorna um erro
-							//inserir erro aqui!!!
 						}
 
 					}
-				} 	else cout << "\nArquivo nao pode ser aberto EQU Este caralho!!!\n\n";
+					if(erroequ==0){ //Retornando o erro para a resolução de EQU não válida
+						cout<<"Valor de EQU válido para " << nomeparam << " não foi encontrado no arquivo, revise o código .asm."<<endl;
+						erroequ=0;
+					}
+				} 	else cout << "\nArquivo EQU nao pode ser aberto!!!\n\n";
 			}	else{saidafile << line << endl;}
 		}
 		equfile.close();
@@ -450,9 +442,6 @@ int main(int argc, char* argv[]) {
 	//de argumentos mais um.
 	string file_name;
 
-
-
-
 	file_name = argv[2]; // passar para learquivo(). eh o nome do arquivo .asm.
 	string file_in = file_name + ".asm";
 	if ( ! file_exist(file_in) )
@@ -461,12 +450,11 @@ int main(int argc, char* argv[]) {
 		return 0;
 	}
 
-
 	//lerarquivo(argv[2],argv[3]);
 	lerarquivo(file_in,argv[3]);
 
-	return 0;
 	if (string(argv[1])=="-p"){
+		cout << endl << "Iniciando o -p" << endl;
 		pre_procesamento(argv[3]);
 	}else if (string(argv[1])=="-m"){
 		pre_procesamento(argv[3]);

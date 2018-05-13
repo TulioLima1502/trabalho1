@@ -452,6 +452,53 @@ void pre_procesamento(char* file_name, int lineachousection) {
 	}
 }
 
+
+vector<string> separate_tokens(string line){
+
+	stringstream stream_line(line);
+	vector<string> token_vector;  
+	size_t prev = 0, pos;
+    while ((pos = line.find_first_of(" ", prev)) != std::string::npos)
+    {
+        if (pos > prev)
+            token_vector.push_back(line.substr(prev, pos-prev));
+        prev = pos+1;
+    }
+    if (prev < line.length())
+        token_vector.push_back(line.substr(prev, std::string::npos));
+
+    return token_vector;
+}
+
+
+
+/*void lexer(){
+}*/
+
+void montagem(string file_in, string file_out){
+	
+	std::ifstream infile(file_in); 
+	std::string line;
+
+	//Cria arquivo de saída
+	ofstream outputFile(file_out);
+
+	int n_linha = 0;
+	//While lê arquivo de entrada até o arquivo acabar.
+	while (std::getline(infile, line))  
+	{
+		n_linha++;
+		vector<string> teste = separate_tokens(line);
+		for (vector<string>::iterator it = teste.begin(); it != teste.end(); ++it)
+		{
+			cout << (*it) << endl;
+		}
+		cout << "****";
+		//lexer(
+	}
+
+}
+
 int main(int argc, char* argv[]) {	
 	//argc eh um inteiro com o numero de argumentos passados pela linha de comando
 	//argv eh um vetor com os argumentos. argv[0] sempre sera o path do programa,
@@ -491,5 +538,6 @@ int main(int argc, char* argv[]) {
 	}else {
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
+	montagem("bin.pre","bin.teste");
 	//return 0;
 }

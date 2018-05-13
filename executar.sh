@@ -10,3 +10,23 @@ echo '
 Compilando triangulo.asm'
 sleep 5
 ./trabalho1 -p triangulo triangulo
+echo '
+*****
+Compilando test_basico.asm'
+sleep 5
+./trabalho1 -p test_basico test_basico
+echo '
+*****
+Compilando test_erro_assembler.asm'
+sleep 5
+./trabalho1 -p test_erro_assembler test_erro_assembler
+echo '
+*****
+Compilando test_erro_lexer.asm'
+sleep 5
+./trabalho1 -p test_erro_lexer test_erro_lexer
+echo '
+*****
+Compilando test_vector_plus.asm'
+sleep 5
+./trabalho1 -p test_vector_plus test_vector_plus

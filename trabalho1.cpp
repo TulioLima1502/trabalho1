@@ -539,5 +539,5 @@ int main(int argc, char* argv[]) {
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 	montagem("bin.pre","bin.teste");
-	//return 0;
+	return 0;
 }

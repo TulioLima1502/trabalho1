@@ -190,10 +190,10 @@ int lerarquivo(std::string file_name,char* file_name2 ) {
 void expande_macro(char* file_name){
 
 	string nome;
-	cout<<file_name << endl;
+	//cout<<file_name << endl;
 	nome=file_name;
 	nome=nome.substr(0,nome.size());
-	cout << nome;
+	//cout << nome;
 
 	string line, nomedamacro, nomeparam, valorparam, nomeequ, valorequ, token, mntbusca, mdtbusca, mdtline, linhabusca, comparando, linhafimacro;
 
@@ -206,7 +206,7 @@ void expande_macro(char* file_name){
 
 	string termina="END";
 
-	int linhamdt=0, tam, contador=0, compara=0, linhafim;
+	int linhamdt=0, tam, contador=0, compara=0, linhafim, inicio_argumentos=0;
 
 	if (meufile.is_open())
 	{
@@ -222,14 +222,21 @@ void expande_macro(char* file_name){
 				//Chama uma rotina para salvar em um arquivo o nome da macro, a quantidade de parametros e a linha que será adicionada na MDT
 				//Pega a linha em que foi achada a macro, e encontra o nome que vem antes dos ':'
 				poscom=line.find(":");
+				cout << "Mostrando a posição na linha que o nome macro está: " <<line.find("MACRO")<< endl;
+				inicio_argumentos=line.find("MACRO")+5;
+				cout << "Mostrando o inicio dos argumentos da macro: " << inicio_argumentos<< endl;
 				nomedamacro=line.substr(0,poscom);
 				cout << nomedamacro << endl;
+				cout << "Mostrando a quantidade de argumentos da MACRO:" << line.substr(inicio_argumentos,(line.size()-inicio_argumentos)) << endl;
 				//inicialização da variável que diz qual linha estará o escopo da macro
 				//cout << nomedamacro << endl;
 				if (mntfile.is_open())
 				{
 					mntfile << nomedamacro << "\t" << linhamdt << endl; //o nome desse arquivo é MNT(Macro Name Table)
+					//cout << "Formato de argumentos que a macro aceita:" << line.substr(inicio_argumentos,(line.size()-inicio_argumentos)) << endl;
+					//caso o valor dos argumentos não esteja correto então mostra um erro
 					getline(meufile,line);
+
 					do{
 						mdtfile << line << endl;
 						getline(meufile,line);
@@ -373,7 +380,7 @@ void pre_procesamento(char* file_name, int lineachousection) {
 			linecounter++;
 			if (line.find("EQU")!=line.npos)
 			{
-				cout << "\nTem um EQU aqui\n";
+				//cout << "\nTem um EQU aqui\n";
 				fim=line.size();
 
 				valorparam=line[fim-1];
@@ -391,11 +398,11 @@ void pre_procesamento(char* file_name, int lineachousection) {
 
 				//Verifica se EQU vem depois de SECTION
 				if ( linecounter  >= lineachousection ){
-					cout << "\n. Diretiva EQU encontrada após a diretiva SECTION na linha " << linecounter;
+					cout << "\nDiretiva EQU encontrada após a diretiva SECTION na linha " << linecounter << endl;
 				}
 
 			}else if(line.find("IF")!=line.npos){
-				cout << "\nTem um IF aqui\n";
+				//cout << "\nTem um IF aqui\n";
 				fim=line.size();
 				size_t posif=line.find("IF");
 				nomeparam=line.substr(posif+3,fim);
@@ -419,9 +426,9 @@ void pre_procesamento(char* file_name, int lineachousection) {
 						//olha na tabela de EQU procurando o valor que está logo após o IF(0 ou 1)
 						if(nomeequ.compare(nomeparam)==0){
 							//parametro existe na tabela e podemos verificar o seu valor
-							cout << nomeequ << endl;
-							cout << "aqui" <<endl;
-							cout << valorequ << endl;
+							//cout << nomeequ << endl;
+							//cout << "aqui" <<endl;
+							//cout << valorequ << endl;
 							//verifica o valor de nomeequ
 							if(valorequ=="1"){
 								remover=0;

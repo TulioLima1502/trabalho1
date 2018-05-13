@@ -471,9 +471,42 @@ vector<string> separate_tokens(string line){
 }
 
 
+void lexer(std::vector<std::string> token_vector, int n_linha)
+{
 
-/*void lexer(){
-}*/
+	cout << "\n\n INICIOU LEXER \n\n";
+	for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
+	{
+		string str = *it;
+		if (   isalpha(str.at(0)) || ( str.at(0) == '_' )   )
+		{ 
+			for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
+			{
+				if (  !isdigit(*it3)   &&  !isalpha(*it3) &&  !((*it3)=='_')   )
+				{
+					if ((*it3) == ':' )
+					{
+						(*it).erase(std::prev((*it).end()));
+					} 
+					else
+					{
+
+						printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha );
+						cout << (*it);
+						break;
+					}
+				}
+			}
+		}
+		else
+		{
+			if (str.size()>1)
+				cout << "UEPA   " << (*it) << endl;
+				printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha );
+		}
+	}
+}
+
 
 void montagem(string file_in, string file_out){
 	
@@ -488,13 +521,9 @@ void montagem(string file_in, string file_out){
 	while (std::getline(infile, line))  
 	{
 		n_linha++;
-		vector<string> teste = separate_tokens(line);
-		for (vector<string>::iterator it = teste.begin(); it != teste.end(); ++it)
-		{
-			cout << (*it) << endl;
-		}
-		cout << "****";
-		//lexer(
+		vector<string> token_vector = separate_tokens(line);
+
+		lexer(token_vector, n_linha);
 	}
 
 }
@@ -538,6 +567,7 @@ int main(int argc, char* argv[]) {
 	}else {
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
-	montagem("bin.pre","bin.teste");
+	//montagem("bin.pre","bin.teste");
+	montagem("teste.pre","teste.teste");
 	return 0;
 }

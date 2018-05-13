@@ -1,5 +1,5 @@
 swap: EQU 0
-teste: EQU 1
+teste: EQU 0
 testando: EQU 1
 SECTION TEXT       ;uwdhcausbdcisip saudchuihsabdcu9bas 
 INPUT           OLD_DATA           ;ichauhc
@@ -7,6 +7,7 @@ INPUT           OLD_DATA           ;ichauhc
 L1: DIV     DOIS   ;uasdchuashbdcosanoidcnb
 STORE  NEW_DATA ;wiudchuhdc9uhsd9ufch
 SWAP: MACRO
+testeEquDpsSec: EQU 5
 MULT        DOIS;iuech9uhdcu udcuducohusnd;dushc9usehc
 STORE     TMP_DATA;0iechu0ueh0icuhes0i
 STORE     MP_DATA;0iechu0ueh0icuhes0i
@@ -23,7 +24,7 @@ OIE
 testezao: ADD OLD_DATA
 SWAP
 IF     teste
-    COPY NEW_DATA OLD_DATA
+    COPY NEW_DATA,OLD_DATA
 LOAD     OLD_DATA   
 JMPP L1
 STOP

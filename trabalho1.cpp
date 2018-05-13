@@ -89,7 +89,7 @@ string formato_padrao(string line) {
 }
 
 //void lerarquivo(char* file_name,char* file_name2 ) { 
-void lerarquivo(std::string file_name,char* file_name2 ) { 
+int lerarquivo(std::string file_name,char* file_name2 ) { 
 	string line;
 	string nome,saida,mcr,pontoo;
 	nome=file_name2;
@@ -120,12 +120,15 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 	remove("tabela_de_simbolos");
 	remove (ppontoo);
 
+	int lineachousection = 0;
 
 	ofstream mfile("auxiliar", ios::app);
 	if (myfile.is_open())
 	{
+		int linecounter = 0;	
 		while (getline(myfile, line))
 		{
+			linecounter++;
 			line=filtro_comentarios(line);
 			line=formato_padrao(line); 	// remove tabulacoes, espacos extras e quebras de linhas.
 			if (mfile.is_open() && line!="")
@@ -139,12 +142,18 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 			}
 			if (line.find("SECTION TEXT")==0){
 				achoutext=1;
+				if (lineachousection == 0){
+					lineachousection = linecounter;
+				}				
 			}
 			if (line.find("SECTION DATA")==0){
 				achoudata=1;
 				if (achoutext==0){
 					erro_ordem_section=1;
 				}
+				if (lineachousection == 0){
+					lineachousection = linecounter;
+				}	
 			}
 			if (line.find("SECTION")==0){
 				size_t pos = line.find("SECTION");
@@ -175,6 +184,7 @@ void lerarquivo(std::string file_name,char* file_name2 ) {
 		cout << "ERRO, A DIRETIVA 'TEXT' DEVE SEMPRE VIR ANTES DA DIRETIVA 'DATA'" << endl;
 	}
 
+	return lineachousection;
 }
 
 void expande_macro(char* file_name){
@@ -337,7 +347,7 @@ void expande_macro(char* file_name){
 	meufile.close();
 }
 
-void pre_procesamento(char* file_name) {
+void pre_procesamento(char* file_name, int lineachousection) {
 	
 	cout << "Começando a fazer o pre processamento do arquivo: ";
 	string nome;
@@ -357,8 +367,10 @@ void pre_procesamento(char* file_name) {
 
 	if (meufile.is_open()) 
 	{
+		int linecounter = 0;
 		while(getline(meufile, line))
 		{
+			linecounter++;
 			if (line.find("EQU")!=line.npos)
 			{
 				cout << "\nTem um EQU aqui\n";
@@ -376,6 +388,11 @@ void pre_procesamento(char* file_name) {
 					equfile << valorparam <<endl;
 				}
 				else cout << "\nArquivo nao pode ser aberto EQU!!!\n\n";
+
+				//Verifica se EQU vem depois de SECTION
+				if ( linecounter  >= lineachousection ){
+					cout << "\n. Diretiva EQU encontrada após a diretiva SECTION na linha " << linecounter;
+				}
 
 			}else if(line.find("IF")!=line.npos){
 				cout << "\nTem um IF aqui\n";
@@ -451,13 +468,13 @@ int main(int argc, char* argv[]) {
 	}
 
 	//lerarquivo(argv[2],argv[3]);
-	lerarquivo(file_in,argv[3]);
+	int lineachousection = lerarquivo(file_in,argv[3]);
 
 	if (string(argv[1])=="-p"){
 		cout << endl << "Iniciando o -p" << endl;
-		pre_procesamento(argv[3]);
+		pre_procesamento(argv[3], lineachousection);
 	}else if (string(argv[1])=="-m"){
-		pre_procesamento(argv[3]);
+		pre_procesamento(argv[3], lineachousection);
 		expande_macro(argv[3]);
 		// realiza a expansão das macros em um arquivo com extensão .mcr
 		// pega o arquivo da etapa anterior, le o que está nele e executa a criação da MNT e da MDT
@@ -467,7 +484,7 @@ int main(int argc, char* argv[]) {
 		//montagem();
 		//codigo_objeto();
 	}else if (string(argv[1])=="-o"){
-		pre_procesamento(argv[3]);
+		pre_procesamento(argv[3], lineachousection);
 		expande_macro(argv[3]);
 		//montagem(argv[3]);
 		//Realiza a montagem do código depois de expandir as macros

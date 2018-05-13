@@ -495,10 +495,10 @@ void lexer(std::vector<std::string> token_vector, int n_linha){
 				}
 			}
 		}
-		else //começa com número
+		else 
 		{
 			for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
-			{ 		//se algum dos outros dígitos não for número, é erro, senão é só um número
+			{ 
 				if ( !isdigit(*it3) )
 				{
 					printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha );
@@ -508,7 +508,6 @@ void lexer(std::vector<std::string> token_vector, int n_linha){
 		}
 	}
 }
-
 
 void montagem(string file_in, string file_out){
 	
@@ -525,6 +524,7 @@ void montagem(string file_in, string file_out){
 		n_linha++;
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
+		//até aqui o programa leu uma linha, separou os token em um vector<string> e fez análise léxica
 	}
 
 }
@@ -568,6 +568,7 @@ int main(int argc, char* argv[]) {
 	}else {
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
+	
 	//montagem("bin.pre","bin.teste");
 	montagem("teste.pre","teste.teste");
 

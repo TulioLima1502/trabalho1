@@ -453,8 +453,7 @@ void pre_procesamento(char* file_name, int lineachousection) {
 }
 
 
-vector<string> separate_tokens(string line){
-
+/*vector<string> separate_tokens(string line){
 	stringstream stream_line(line);
 	vector<string> token_vector;  
 	size_t prev = 0, pos;
@@ -468,13 +467,28 @@ vector<string> separate_tokens(string line){
         token_vector.push_back(line.substr(prev, std::string::npos));
 
     return token_vector;
+}*/
+
+//função para teste
+vector<string> separate_tokens(string line){
+	stringstream stream_line(line);
+	vector<string> token_vector;  
+	size_t prev = 0, pos;
+	//Separa tokens por espaços ou vírgulas
+    while (((pos = line.find_first_of(" ", prev)) != std::string::npos) || (pos = line.find_first_of(",", prev)) != std::string::npos)
+    {
+        if (pos > prev)
+            token_vector.push_back(line.substr(prev, pos-prev));
+        prev = pos+1;
+    }
+    if (prev < line.length())
+        token_vector.push_back(line.substr(prev, std::string::npos));
+
+    return token_vector;
 }
 
 
-void lexer(std::vector<std::string> token_vector, int n_linha)
-{
-
-	cout << "\n\n INICIOU LEXER \n\n";
+void lexer(std::vector<std::string> token_vector, int n_linha){
 	for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
 	{
 		string str = *it;
@@ -522,6 +536,11 @@ void montagem(string file_in, string file_out){
 	{
 		n_linha++;
 		vector<string> token_vector = separate_tokens(line);
+		for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
+		{
+			cout << (*it) << endl;
+		}
+		cout << "***" << endl;
 
 		lexer(token_vector, n_linha);
 	}

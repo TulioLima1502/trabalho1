@@ -452,24 +452,6 @@ void pre_procesamento(char* file_name, int lineachousection) {
 	}
 }
 
-
-/*vector<string> separate_tokens(string line){
-	stringstream stream_line(line);
-	vector<string> token_vector;  
-	size_t prev = 0, pos;
-    while ((pos = line.find_first_of(" ", prev)) != std::string::npos)
-    {
-        if (pos > prev)
-            token_vector.push_back(line.substr(prev, pos-prev));
-        prev = pos+1;
-    }
-    if (prev < line.length())
-        token_vector.push_back(line.substr(prev, std::string::npos));
-
-    return token_vector;
-}*/
-
-//função para teste
 vector<string> separate_tokens(string line){
 	stringstream stream_line(line);
 	vector<string> token_vector;  
@@ -500,23 +482,29 @@ void lexer(std::vector<std::string> token_vector, int n_linha){
 				{
 					if ((*it3) == ':' )
 					{
-						(*it).erase(std::prev((*it).end()));
+						if ( (*it).back() == (*it3) )
+							(*it).erase(std::prev((*it).end()));
+						else
+							printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha );
 					} 
 					else
 					{
-
 						printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha );
-						cout << (*it);
 						break;
 					}
 				}
 			}
 		}
-		else
+		else //começa com número
 		{
-			if (str.size()>1)
-				cout << "UEPA   " << (*it) << endl;
-				printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha );
+			for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
+			{ 		//se algum dos outros dígitos não for número, é erro, senão é só um número
+				if ( !isdigit(*it3) )
+				{
+					printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha );
+					break;
+				}
+			}
 		}
 	}
 }
@@ -536,12 +524,6 @@ void montagem(string file_in, string file_out){
 	{
 		n_linha++;
 		vector<string> token_vector = separate_tokens(line);
-		for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
-		{
-			cout << (*it) << endl;
-		}
-		cout << "***" << endl;
-
 		lexer(token_vector, n_linha);
 	}
 
@@ -588,5 +570,6 @@ int main(int argc, char* argv[]) {
 	}
 	//montagem("bin.pre","bin.teste");
 	montagem("teste.pre","teste.teste");
+
 	return 0;
 }

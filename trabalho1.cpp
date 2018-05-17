@@ -938,6 +938,7 @@ void montagem2(string file_in, string file_out)
 	//TODO abrir arquivo intermediario de novo?  inter_file
 
 	//Cria arquivo de saída
+	/*string inter_file = infile; //TODO corrigir o nome do arquivo 
 	ofstream outputFile(file_out);
 	while (std::getline(inter_file, line))
 	{
@@ -953,7 +954,7 @@ void montagem2(string file_in, string file_out)
 
 			//TODO escrever no arquivo final o token
 		}
-	}
+	}*/
 }
 
 

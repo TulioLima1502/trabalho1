@@ -850,12 +850,13 @@ void montagem(string file_in, string file_out)
 
 	std::ifstream infile(file_in);
 	std::string line;
+	string str;
+
+	int n_linha = 0;
+	int is_empty=0;
 
 	//Cria arquivo de saída
 	ofstream outputFile(file_out);
-
-	int n_linha = 0;
-
 
 	//While lê arquivo de entrada até o arquivo acabar.
 	while (std::getline(infile, line))
@@ -867,28 +868,25 @@ void montagem(string file_in, string file_out)
 		lexer(token_vector, n_linha);
 
 		vector<string>::iterator it = token_vector.begin();
-		 /*
-		//VERIFICA SE É DEFINIÇÃO DE LABEL
-		string first_str = token_vector.front() ;
-		if ( first_str.back() == ':' )
+		if(!token_vector.empty())
 		{
-			first_str.erase(std::prev(first_str.end()));
-			token_vector.at(0) = first_str;
-			//TODO é uma definição de label, colocar na tabela
-			++it; //Incrementar para o próximo token pra continuar o tratamento
+			str = *it;
+			//VERIFICA SE É DEFINIÇÃO DE LABEL
+			if ( str.back() == ':' )
+			{
+				str.erase(std::prev(str.end()));
+				token_vector.at(0) = str;
+				//TODO é uma definição de label, colocar na tabela
+				++it; //Incrementar para o próximo token pra continuar o tratamento
+			}
+			while (it != token_vector.end())
+			{
+				//TODOifVerificar se é uma instrução
+				//TODOelse if Verificar se é diretiva
+				//TODOelse if verificar se foi definido na tabela de simbolo
+				++it;
+			}
 		}
-		
-		//PERCORRER TODOS OS TOKENS DE UMA LINHA
-		while (it != token_vector.end())
-		{
-			//ifVerificar se é uma instrução
-			//else if Verificar se é diretiva
-			//else if verificar se foi definido na tabela de simbolo
-			++it;
-		}*/
-		//fazer laço no token_vector
-		//verificar se 1 string é um label (ver se tem dois)
-
 	}
 }
 

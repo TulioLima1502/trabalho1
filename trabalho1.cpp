@@ -892,9 +892,12 @@ void montagem(string file_in, string file_out)
 	}
 }
 
+
+
 void montagem2(string file_in, string file_out)
 {
 
+	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;
 	string str;
@@ -902,9 +905,8 @@ void montagem2(string file_in, string file_out)
 	int n_linha = 0;		//número da linha do programa
 	int n_address = -1;		//número do endereço equivalente
 
-	//PRIMEIRA PASSAGEM
 	//Cria arquivo intermediario
-	ofstream interfile("file_inter.txt");
+	ofstream ofile("file_inter.txt");
 	//While lê arquivo de entrada até o arquivo acabar
 	while (std::getline(infile, line))
 	{
@@ -929,28 +931,29 @@ void montagem2(string file_in, string file_out)
 				n_address = n_address + token_vector.size() -1;
 
     		for (const auto &e : token_vector)
-    			interfile << e << " ";
-    		interfile << endl;
+    			ofile << e << " ";
+    		ofile << endl;
 		}	
 	}
 	infile.close(); 
-	interfile.close();
+	ofile.close();
 
 
 
-	//SEGUNDA PASSAGEM
-	//TODO abrir arquivo intermediario de novo?  inter_file
-/*
+	//*******SEGUNDA PASSAGEM*******
+	std::ifstream ifile("file_inter.txt");
+
+	n_linha = 0;		//número da linha do programa
+	n_address = -1;		//número do endereço equivalente
+
 	//Cria arquivo de saída
-	ofstream outputFile(file_out);
-
-	//TODO corrigir o nome do arquivo 
-	std::ifstream interfile("teste.pre");
-	while (std::getline(interfile, line))
+	ofstream outfile(file_out);
+	//While lê arquivo de entrada até o arquivo acabar
+	while (std::getline(ifile, line))
 	{
 		n_linha++;
-		vector<string> token_vector = separate_tokens(line);
 
+		vector<string> token_vector = separate_tokens(line);
 		vector<string>::iterator it = token_vector.begin();
 
 		if(!token_vector.empty())
@@ -960,7 +963,9 @@ void montagem2(string file_in, string file_out)
 
 			//TODO escrever no arquivo final o token
 		}
-	}*/
+	}
+	ifile.close(); 
+	outfile.close();
 }
 
 

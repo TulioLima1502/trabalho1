@@ -22,15 +22,129 @@
 
 using namespace std;
 
-
+//DEFINIÇÃO DE STRUCTS
 typedef struct tabela_simbolo
 {
 	string simbolo;
 	int valor;
 } tabela_simbolo;
 
+typedef struct tabela_instrucao
+{
+  string mnemonico;
+  string opcode; 
+  int n_operando;
+} tabela_instrucao;
+
+typedef struct tabela_diretiva
+{
+	string mnemonico;
+	int n_operando;
+} tabela_diretiva;
+
+
+//DEFINIÇÃO DAS TABELAS
 vector<tabela_simbolo> tabela_simbolo_vector;
 
+vector<tabela_instrucao> tabela_instrucao_vector;
+
+vector<tabela_diretiva> tabela_diretiva_vector;
+
+
+
+//INICIALIZAÇÃO DAS TABELAS
+//*****TABELA DE INSTRUÇÕES
+void inicia_tabela_instrucao()
+{
+	tabela_instrucao temp;
+
+	temp.mnemonico = "ADD";
+	temp.opcode = "01";
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "SUB";
+	temp.opcode = "02";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "MULT";
+	temp.opcode = "03";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "DIV";
+	temp.opcode = "04";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMP";
+	temp.opcode = "05";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPN";
+	temp.opcode = "06";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPP";
+	temp.opcode = "07";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPZ";
+	temp.opcode = "08";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "COPY";
+	temp.opcode = "09";
+	temp.n_operando = 2  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "LOAD";
+	temp.opcode = "10";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "STORE";
+	temp.opcode = "11";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "INPUT";
+	temp.opcode = "12";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "OUTPUT";
+	temp.opcode = "13";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "STOP";
+	temp.opcode = "14";
+	temp.n_operando = 0 ;
+	tabela_instrucao_vector.push_back(temp); 
+}
+
+void inicia_tabela_diretiva()
+{
+	tabela_diretiva temp2;
+
+	temp2.mnemonico = "SECTION";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+
+	temp2.mnemonico = "SPACE";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+
+	temp2.mnemonico = "CONST";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+}
 
 
 bool file_exist(std::string fileName)
@@ -1042,7 +1156,8 @@ int main(int argc, char *argv[])
 	//montagem("bin.pre","bin.teste");
 	//montagem("teste.pre", "teste.teste");
 	//montagem2("teste.pre", "teste.teste");
-
+	inicia_tabela_diretiva();
+	inicia_tabela_instrucao();
 	primeira_passagem("teste.pre");
 	segunda_passagem("teste.teste");
 

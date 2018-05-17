@@ -22,6 +22,17 @@
 
 using namespace std;
 
+
+typedef struct tabela_simbolo
+{
+	string simbolo;
+	int valor;
+} tabela_simbolo;
+
+vector<tabela_simbolo> tabela_simbolo_vector;
+
+
+
 bool file_exist(std::string fileName)
 {
 	//fileName = fileName + ".asm" ;
@@ -893,10 +904,16 @@ void montagem(string file_in, string file_out)
 }
 
 
-
-void montagem2(string file_in, string file_out)
+void definir_label(string str, int n_address)
 {
+	tabela_simbolo temp;
+	temp.simbolo = str;
+	temp.valor = n_address;
+	tabela_simbolo_vector.push_back(temp);
+}
 
+void primeira_passagem(string file_in)
+{
 	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;
@@ -924,8 +941,8 @@ void montagem2(string file_in, string file_out)
 			{
 				str.erase(std::prev(str.end()));
 				token_vector.at(0) = str;
+				definir_label(str,n_address);
 				n_address = n_address + token_vector.size() - 2; 
-				//TODO criar tabela de definição de simbolos
 			}
 			else
 				n_address = n_address + token_vector.size() -1;
@@ -937,14 +954,17 @@ void montagem2(string file_in, string file_out)
 	}
 	infile.close(); 
 	ofile.close();
+}
 
-
-
+void segunda_passagem(string file_out)
+{
 	//*******SEGUNDA PASSAGEM*******
 	std::ifstream ifile("file_inter.txt");
+	std::string line;
+	string str;
 
-	n_linha = 0;		//número da linha do programa
-	n_address = -1;		//número do endereço equivalente
+	int n_linha = 0;		//número da linha do programa
+	int n_address = -1;		//número do endereço equivalente
 
 	//Cria arquivo de saída
 	ofstream outfile(file_out);
@@ -962,6 +982,7 @@ void montagem2(string file_in, string file_out)
 			//VERIFICA SE É INSTRUÇÃO
 
 			//TODO escrever no arquivo final o token
+    		//outfile << str << " ";
 		}
 	}
 	ifile.close(); 
@@ -1020,7 +1041,11 @@ int main(int argc, char *argv[])
 
 	//montagem("bin.pre","bin.teste");
 	//montagem("teste.pre", "teste.teste");
-	montagem2("teste.pre", "teste.teste");
+	//montagem2("teste.pre", "teste.teste");
+
+	primeira_passagem("teste.pre");
+	segunda_passagem("teste.teste");
+
 
 	return 0;
 }

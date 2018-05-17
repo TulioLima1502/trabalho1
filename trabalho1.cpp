@@ -853,7 +853,6 @@ void montagem(string file_in, string file_out)
 	string str;
 
 	int n_linha = 0;
-	int is_empty=0;
 
 	//Cria arquivo de saída
 	ofstream outputFile(file_out);
@@ -861,11 +860,11 @@ void montagem(string file_in, string file_out)
 	//While lê arquivo de entrada até o arquivo acabar.
 	while (std::getline(infile, line))
 	{
-		n_linha++;
-
 		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
+		//TODO colocar linha dentro do if do empty???
+		n_linha++;
 
 		vector<string>::iterator it = token_vector.begin();
 		if(!token_vector.empty())
@@ -876,7 +875,9 @@ void montagem(string file_in, string file_out)
 			{
 				str.erase(std::prev(str.end()));
 				token_vector.at(0) = str;
-				//TODO é uma definição de label, colocar na tabela
+				//TODO if definição de label, colocar na tabela
+				//else
+				//	printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
 				++it; //Incrementar para o próximo token pra continuar o tratamento
 			}
 			while (it != token_vector.end())
@@ -884,11 +885,79 @@ void montagem(string file_in, string file_out)
 				//TODOifVerificar se é uma instrução
 				//TODOelse if Verificar se é diretiva
 				//TODOelse if verificar se foi definido na tabela de simbolo
+				//TODO else erro simbolo nao
 				++it;
 			}
 		}
 	}
 }
+
+void montagem2(string file_in, string file_out)
+{
+
+	std::ifstream infile(file_in);
+	std::string line;
+	string str;
+
+	int n_linha = 0;		//número da linha do programa
+	int n_address = -1;		//número do endereço equivalente
+
+	//TODO criar arquivo de saída intermediario
+	//PRIMEIRA PASSAGEM
+
+	//TODO criar contador de endereco  e implementar 
+	//TODO criar arquivo de saída intermediario  inter_file
+	//While lê arquivo de entrada até o arquivo acabar
+	while (std::getline(infile, line))
+	{
+		//ANÁLISE LÉXICA
+		vector<string> token_vector = separate_tokens(line);
+		lexer(token_vector, n_linha);
+
+		vector<string>::iterator it = token_vector.begin();
+		if(!token_vector.empty())
+		{
+			n_address ++;
+			str = *it;
+			//VERIFICA SE É DEFINIÇÃO DE LABEL
+			if ( str.back() == ':' )
+			{
+				str.erase(std::prev(str.end()));
+				token_vector.at(0) = str;
+				n_address = n_address + token_vector.size() - 2; 
+				//TODO criar tabela de definição de simbolos
+			}
+			else
+				n_address = n_address + token_vector.size() -1;
+			//TODO escrever no arquivo intermediario o token_vector			
+		}	
+	}
+	//TODO fechar arquivo intermediario e arquivo de entrada
+
+
+
+	//SEGUNDA PASSAGEM
+	//TODO abrir arquivo intermediario de novo?  inter_file
+
+	//Cria arquivo de saída
+	ofstream outputFile(file_out);
+	while (std::getline(inter_file, line))
+	{
+		n_linha++;
+		vector<string> token_vector = separate_tokens(line);
+
+		vector<string>::iterator it = token_vector.begin();
+
+		if(!token_vector.empty())
+		{
+			str = *it;
+			//VERIFICA SE É INSTRUÇÃO
+
+			//TODO escrever no arquivo final o token
+		}
+	}
+}
+
 
 int main(int argc, char *argv[])
 {

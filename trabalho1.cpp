@@ -819,9 +819,8 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 				{
 					if ((*it3) == ':')
 					{
-						if ((*it).back() == (*it3))
-							(*it).erase(std::prev((*it).end()));
-						else
+						//se for primeira string e ':' no final, então ok. Se não for isso erro
+						if (!( ( it == token_vector.begin() ) &&  ((*it).back() == (*it3)) ) )
 							printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
 					}
 					else
@@ -856,13 +855,40 @@ void montagem(string file_in, string file_out)
 	ofstream outputFile(file_out);
 
 	int n_linha = 0;
+
+
 	//While lê arquivo de entrada até o arquivo acabar.
 	while (std::getline(infile, line))
 	{
 		n_linha++;
+
+		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
-		//até aqui o programa leu uma linha, separou os token em um vector<string> e fez análise léxica
+
+		vector<string>::iterator it = token_vector.begin();
+		 /*
+		//VERIFICA SE É DEFINIÇÃO DE LABEL
+		string first_str = token_vector.front() ;
+		if ( first_str.back() == ':' )
+		{
+			first_str.erase(std::prev(first_str.end()));
+			token_vector.at(0) = first_str;
+			//TODO é uma definição de label, colocar na tabela
+			++it; //Incrementar para o próximo token pra continuar o tratamento
+		}
+		
+		//PERCORRER TODOS OS TOKENS DE UMA LINHA
+		while (it != token_vector.end())
+		{
+			//ifVerificar se é uma instrução
+			//else if Verificar se é diretiva
+			//else if verificar se foi definido na tabela de simbolo
+			++it;
+		}*/
+		//fazer laço no token_vector
+		//verificar se 1 string é um label (ver se tem dois)
+
 	}
 }
 

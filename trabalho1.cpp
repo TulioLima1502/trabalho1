@@ -902,10 +902,8 @@ void montagem2(string file_in, string file_out)
 	int n_linha = 0;		//número da linha do programa
 	int n_address = -1;		//número do endereço equivalente
 
-	//TODO criar arquivo de saída intermediario
-	//PRIMEIRA PASSAGEM
 
-	//TODO criar contador de endereco  e implementar 
+	//PRIMEIRA PASSAGEM
 	//TODO criar arquivo de saída intermediario  inter_file
 	//While lê arquivo de entrada até o arquivo acabar
 	while (std::getline(infile, line))

@@ -996,14 +996,10 @@ void primeira_passagem2(string file_in)
 	vector<string>::iterator it;
 
 	//Cria arquivo intermediario
-	ofstream ofile("file_inter.txt");
+	//ofstream ofile("file_inter.txt");
 	//While lê arquivo de entrada até o arquivo acabar
 	while (std::getline(infile, line))
 	{
-		//TESTE
-		cout << endl << "linha: " << n_linha << endl;
-		cout << "pc: " << pc;
-
 
 		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
@@ -1024,7 +1020,7 @@ void primeira_passagem2(string file_in)
 					}
 				if (! simbolo_redefinido)
 				{
-					str.erase(std::prev(str.end()));
+					//str.erase(std::prev(str.end()));
 					definir_label(str,pc);
 				}
 			}
@@ -1039,8 +1035,6 @@ void primeira_passagem2(string file_in)
 			{
 				pc = pc + (*it_i).n_operando + 1;
 				found =1;		
-				//TESTE
-				cout << endl << "instruçao: " << str << endl << "n_operando: " << (*it_i).n_operando << endl << "pc: " << pc << endl << "token " << endl;
 			}
 		}
 		//VERIFICA SE É DIRETIVA
@@ -1080,6 +1074,134 @@ void primeira_passagem2(string file_in)
 	}
 }
 
+void segunda_passagem(string file_in, string file_out)
+{
+	//*******PRIMEIRA PASSAGEM*******
+	std::ifstream infile(file_in);
+	std::string line;
+	string str;
+
+
+	int n_linha = 1;		//número da linha do programa
+	int pc = 0;				//número do endereço equivalente
+
+	int found = 0;
+
+
+	vector<string>::iterator it;
+	vector<string>::iterator it_end;
+
+	vector<string> aux;
+	//Cria arquivo intermediario
+	ofstream ofile(file_out);
+	//While lê arquivo de entrada até o arquivo acabar
+	while (std::getline(infile, line))
+	{
+
+		//ANÁLISE LÉXICA
+		vector<string> token_vector = separate_tokens(line);
+		lexer(token_vector, n_linha);
+	
+		it = token_vector.begin();
+		it_end = token_vector.end();
+		str = *it;
+		//VERIFICA SE É LABEL
+		if ( str.back() == ':' )
+		{
+			if (token_vector.size()>1)
+				++it;
+				str = *it;
+		}
+		//VERIFICA SE É INSTRUÇÃO
+		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
+		{
+			if ( ! str.compare( (*it_i).mnemonico) )
+			{			
+				if ( distance(it,it_end) != ((*it_i).n_operando + 1) )
+				{
+					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
+					//todo o que fazer?
+				}
+				else
+				{
+					aux.push_back((*it_i).opcode);
+					for (int i = 0; i < (*it_i).n_operando ; i++)
+					{
+						++it;
+						aux.push_back(*it);	
+						//TODO corrigir substituiçao de simbolos					
+					}
+				}
+				found = 1;		
+			}
+		}
+		//VERIFICA SE É DIRETIVA
+		if (!found)
+		{
+			cout << endl << str << "    n instruçao " << endl;
+			if ( ! str.compare("CONST"))
+			{
+				if ( distance(it,it_end) != 2) 
+				{
+					printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
+				} 
+				else
+				{
+					++it;
+					if ( (*it).size() > 1)
+					{
+						if ((*it).at(1) == 'x')
+						{
+							//todo corrigir hexadecimal
+							aux.push_back( to_string( stoi(*it, nullptr, 0) ) ) ;
+						}
+						else
+							aux.push_back(*it);
+					}
+					else
+					{
+						aux.push_back(*it);	
+						cout << "entrou aqui ";}
+				}
+
+			}
+			else
+			{
+				if ( ! str.compare("SPACE"))
+				{
+					cout << "encontrou SPACE" << endl;
+					++it;
+					if (it != token_vector.end())
+					{
+						for (int i = 0; i < stoi (*it) ; i++)
+							aux.push_back("X");
+					}
+					else
+					{
+						aux.push_back("X");
+					}
+						
+				}
+				else
+				{
+					if ( str.compare("SECTION"))
+						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
+				}
+			}
+		}
+		found = 0;
+		for (const auto &e : aux)
+    		ofile << e << " ";
+    	//TODO retirar linha abaixo depois
+    	ofile << endl;
+
+		++ n_linha;
+		token_vector.clear();
+    	aux.clear();
+	}
+	infile.close(); 
+	ofile.close();
+}
 
 
 
@@ -1127,6 +1249,7 @@ int main(int argc, char *argv[])
 		//montagem(argv[3]);
 		//Realiza a montagem do código depois de expandir as macros
 	}
+
 	else
 	{
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
@@ -1139,7 +1262,7 @@ int main(int argc, char *argv[])
 	inicia_tabela_instrucao();
 	primeira_passagem2("teste.pre");
 	//segunda_passagem("teste.teste");
-
+	segunda_passagem("teste.pre", "file_final.txt");
 
 	return 0;
 }

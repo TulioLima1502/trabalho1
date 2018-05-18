@@ -1007,8 +1007,9 @@ void primeira_passagem(string file_in)
 			if ( str.back() == ':' )
 			{
 				str.erase(std::prev(str.end()));
-				token_vector.at(0) = str;
+				//token_vector.at(0) = str;
 				definir_label(str,n_address);
+				token_vector.erase(token_vector.begin());
 				n_address = n_address + token_vector.size() - 2; 
 			}
 			else
@@ -1039,7 +1040,7 @@ void segunda_passagem(string file_out)
 	while (std::getline(ifile, line))
 	{
 		n_linha++;
-
+		//todo botar essas variaveis pra fora do while
 		vector<string> token_vector = separate_tokens(line);
 		vector<string>::iterator it = token_vector.begin();
 		vector<string> aux;
@@ -1059,7 +1060,7 @@ void segunda_passagem(string file_out)
 						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
 					//escrever opcode no aux
 					aux.push_back((*it_i).opcode);
-
+					//TODO analisar os operandos, 
 					break;
 				}
 			}		
@@ -1069,6 +1070,24 @@ void segunda_passagem(string file_out)
 				//verifica se é diretiva
 				if( ! str.compare("CONST") )
 				{
+					if ( token_vector.size() != 2)
+						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
+					else
+					{
+						++ it;
+
+						if ( (*it).size() > 1)
+						{
+							if ((*it).at(1) == 'x')
+							{
+								aux.push_back( to_string( stoi(*it, nullptr, 0) ) ) ;
+							}
+							else
+								aux.push_back(*it);
+						}
+						else
+							aux.push_back(*it);	
+					}
 					not_defined=0;
 				}
 				else if ( ! str.compare("SECTION") )
@@ -1077,28 +1096,37 @@ void segunda_passagem(string file_out)
 				}
 				else if ( ! str.compare("SPACE") )
 				{
+					if (token_vector.size() == 1 )
+					{
+						aux.push_back("x");
+					}
+					else if (token_vector.size() == 2){
+						++ it; //pega o proximo token 
+						for (int j=1; j<= stoi(*it); j++)
+							aux.push_back("x");
+					}
+					else
+						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
 					not_defined=0;
 				}
 			}
-
 			if (not_defined)
 			{
-				//verifica se é simbolo
+				//TODOerro Erro símbolo não definido.
+				aux = token_vector;
 			}
-			if (not_defined)
-			{
-				//erro
-			}
-
     		for (const auto &e : aux)
     			outfile << e << " ";
     		//TODO retirar linha abaixo depois
     		outfile << endl;
+    		//TODO clear() nos vector pro proximo laço
+    		//aux.clear();
 		}
 	}
 	ifile.close(); 
 	outfile.close();
 }
+
 
 
 int main(int argc, char *argv[])

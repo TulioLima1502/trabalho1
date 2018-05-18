@@ -979,153 +979,107 @@ void definir_label(string str, int n_address)
 	tabela_simbolo_vector.push_back(temp);
 }
 
-void primeira_passagem(string file_in)
+
+void primeira_passagem2(string file_in)
 {
 	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;
 	string str;
 
-	int n_linha = 0;		//número da linha do programa
-	int n_address = -1;		//número do endereço equivalente
+	int n_linha = 1;		//número da linha do programa
+	int pc = 0;				//número do endereço equivalente
+
+	int simbolo_redefinido = 0;
+	int found = 0;
+
+	vector<string>::iterator it;
 
 	//Cria arquivo intermediario
 	ofstream ofile("file_inter.txt");
 	//While lê arquivo de entrada até o arquivo acabar
 	while (std::getline(infile, line))
 	{
+		//TESTE
+		cout << endl << "linha: " << n_linha << endl;
+		cout << "pc: " << pc;
+
+
 		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
-
-		vector<string>::iterator it = token_vector.begin();
-		if(!token_vector.empty())
+	
+		it = token_vector.begin();
+		str = *it;
+		//VERIFICA SE É LABEL
+		if ( str.back() == ':' )
 		{
-			n_address ++;
-			str = *it;
-			//VERIFICA SE É DEFINIÇÃO DE LABEL
-			if ( str.back() == ':' )
+			if ( token_vector.size())
 			{
-				str.erase(std::prev(str.end()));
-				//token_vector.at(0) = str;
-				definir_label(str,n_address);
-				token_vector.erase(token_vector.begin());
-				n_address = n_address + token_vector.size() - 2; 
+				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+					if ( ! str.compare((*it_s).simbolo) )
+					{
+						printf("Erro Semântico! \n Símbolo redefinido. \n Linha: %d \n", n_linha);
+						simbolo_redefinido = 1;
+					}
+				if (! simbolo_redefinido)
+				{
+					str.erase(std::prev(str.end()));
+					definir_label(str,pc);
+				}
+			}
+			if (token_vector.size()>1)
+				++it;
+				str = *it;
+		}
+		//VERIFICA SE É INSTRUÇÃO
+		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
+		{
+			if ( ! str.compare( (*it_i).mnemonico) )
+			{
+				pc = pc + (*it_i).n_operando + 1;
+				found =1;		
+				//TESTE
+				cout << endl << "instruçao: " << str << endl << "n_operando: " << (*it_i).n_operando << endl << "pc: " << pc << endl << "token " << endl;
+			}
+		}
+		//VERIFICA SE É DIRETIVA
+		if (!found)
+		{
+			if ( ! str.compare("CONST"))
+			{
+				pc = pc;
 			}
 			else
-				n_address = n_address + token_vector.size() -1;
-
-    		for (const auto &e : token_vector)
-    			ofile << e << " ";
-    		ofile << endl;
-		}	
-	}
-	infile.close(); 
-	ofile.close();
-}
-
-void segunda_passagem(string file_out)
-{
-	//*******SEGUNDA PASSAGEM*******
-	std::ifstream ifile("file_inter.txt");
-	std::string line;
-	string str;
-
-	int n_linha = 0;		//número da linha do programa
-	int n_address = -1;		//número do endereço equivalente
-
-	//Cria arquivo de saída
-	ofstream outfile(file_out);
-	//While lê arquivo de entrada até o arquivo acabar
-	while (std::getline(ifile, line))
-	{
-		n_linha++;
-		//todo botar essas variaveis pra fora do while
-		vector<string> token_vector = separate_tokens(line);
-		vector<string>::iterator it = token_vector.begin();
-		vector<string> aux;
-		int not_defined = 1;
-		if(!token_vector.empty())
-		{
-			str = *it;
-			//VERIFICA SE É INSTRUÇÃO
-			for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
 			{
-				//verifica se é instruçao
-				if( ! (*it_i).mnemonico.compare(str) )
+				if ( ! str.compare("SPACE"))
 				{
-					not_defined=0;
-					//verifica numero de operandos
-					if ( token_vector.size() != ( (*it_i).n_operando + 1 ) )  //ex:(ADD L1) token_vector.size()=2   {ADD}.n_operando = 1.
-						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
-					//escrever opcode no aux
-					aux.push_back((*it_i).opcode);
-					//TODO analisar os operandos, 
-					break;
+					it++;
+					if (it != token_vector.end())
+						pc = pc + stoi(*it) -1;
 				}
-			}		
-			//VERIFICA SE É DIRETIVA
-			if (not_defined)
-			{
-				//verifica se é diretiva
-				if( ! str.compare("CONST") )
+				else
 				{
-					if ( token_vector.size() != 2)
-						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
+					if ( ! str.compare("SECTION"))
+					{
+						pc=pc;
+					}
 					else
 					{
-						++ it;
-
-						if ( (*it).size() > 1)
-						{
-							if ((*it).at(1) == 'x')
-							{
-								aux.push_back( to_string( stoi(*it, nullptr, 0) ) ) ;
-							}
-							else
-								aux.push_back(*it);
-						}
-						else
-							aux.push_back(*it);	
+						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
 					}
-					not_defined=0;
-				}
-				else if ( ! str.compare("SECTION") )
-				{
-					not_defined=0;
-				}
-				else if ( ! str.compare("SPACE") )
-				{
-					if (token_vector.size() == 1 )
-					{
-						aux.push_back("x");
-					}
-					else if (token_vector.size() == 2){
-						++ it; //pega o proximo token 
-						for (int j=1; j<= stoi(*it); j++)
-							aux.push_back("x");
-					}
-					else
-						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
-					not_defined=0;
 				}
 			}
-			if (not_defined)
-			{
-				//TODOerro Erro símbolo não definido.
-				aux = token_vector;
-			}
-    		for (const auto &e : aux)
-    			outfile << e << " ";
-    		//TODO retirar linha abaixo depois
-    		outfile << endl;
-    		//TODO clear() nos vector pro proximo laço
-    		//aux.clear();
 		}
+		++ n_linha;
 	}
-	ifile.close(); 
-	outfile.close();
+
+	for (vector<tabela_simbolo>::iterator it = tabela_simbolo_vector.begin(); it != tabela_simbolo_vector.end(); ++it)
+	{
+		cout << endl<< (*it).simbolo <<endl;
+	}
 }
+
 
 
 
@@ -1183,8 +1137,8 @@ int main(int argc, char *argv[])
 	//montagem2("teste.pre", "teste.teste");
 	inicia_tabela_diretiva();
 	inicia_tabela_instrucao();
-	primeira_passagem("teste.pre");
-	segunda_passagem("teste.teste");
+	primeira_passagem2("teste.pre");
+	//segunda_passagem("teste.teste");
 
 
 	return 0;

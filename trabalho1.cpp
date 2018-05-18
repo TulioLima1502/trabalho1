@@ -970,53 +970,6 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 	}
 }
 
-void montagem(string file_in, string file_out)
-{
-
-	std::ifstream infile(file_in);
-	std::string line;
-	string str;
-
-	int n_linha = 0;
-
-	//Cria arquivo de saída
-	ofstream outputFile(file_out);
-
-	//While lê arquivo de entrada até o arquivo acabar.
-	while (std::getline(infile, line))
-	{
-		//ANÁLISE LÉXICA
-		vector<string> token_vector = separate_tokens(line);
-		lexer(token_vector, n_linha);
-		//TODO colocar linha dentro do if do empty???
-		n_linha++;
-
-		vector<string>::iterator it = token_vector.begin();
-		if(!token_vector.empty())
-		{
-			str = *it;
-			//VERIFICA SE É DEFINIÇÃO DE LABEL
-			if ( str.back() == ':' )
-			{
-				str.erase(std::prev(str.end()));
-				token_vector.at(0) = str;
-				//TODO if definição de label, colocar na tabela
-				//else
-				//	printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
-				++it; //Incrementar para o próximo token pra continuar o tratamento
-			}
-			while (it != token_vector.end())
-			{
-				//TODOifVerificar se é uma instrução
-				//TODOelse if Verificar se é diretiva
-				//TODOelse if verificar se foi definido na tabela de simbolo
-				//TODO else erro simbolo nao
-				++it;
-			}
-		}
-	}
-}
-
 
 void definir_label(string str, int n_address)
 {
@@ -1089,14 +1042,58 @@ void segunda_passagem(string file_out)
 
 		vector<string> token_vector = separate_tokens(line);
 		vector<string>::iterator it = token_vector.begin();
-
+		vector<string> aux;
+		int not_defined = 1;
 		if(!token_vector.empty())
 		{
 			str = *it;
 			//VERIFICA SE É INSTRUÇÃO
+			for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
+			{
+				//verifica se é instruçao
+				if( ! (*it_i).mnemonico.compare(str) )
+				{
+					not_defined=0;
+					//verifica numero de operandos
+					if ( token_vector.size() != ( (*it_i).n_operando + 1 ) )  //ex:(ADD L1) token_vector.size()=2   {ADD}.n_operando = 1.
+						printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
+					//escrever opcode no aux
+					aux.push_back((*it_i).opcode);
 
-			//TODO escrever no arquivo final o token
-    		//outfile << str << " ";
+					break;
+				}
+			}		
+			//VERIFICA SE É DIRETIVA
+			if (not_defined)
+			{
+				//verifica se é diretiva
+				if( ! str.compare("CONST") )
+				{
+					not_defined=0;
+				}
+				else if ( ! str.compare("SECTION") )
+				{
+					not_defined=0;
+				}
+				else if ( ! str.compare("SPACE") )
+				{
+					not_defined=0;
+				}
+			}
+
+			if (not_defined)
+			{
+				//verifica se é simbolo
+			}
+			if (not_defined)
+			{
+				//erro
+			}
+
+    		for (const auto &e : aux)
+    			outfile << e << " ";
+    		//TODO retirar linha abaixo depois
+    		outfile << endl;
 		}
 	}
 	ifile.close(); 

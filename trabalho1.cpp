@@ -1010,7 +1010,9 @@ void primeira_passagem2(string file_in)
 		//VERIFICA SE É LABEL
 		if ( str.back() == ':' )
 		{
-			if ( token_vector.size())
+			str.erase(std::prev(str.end()));
+			cout << "primeira passagem, encontrou label, o token agora é: " << str << endl; //teste
+			if ( token_vector.size()) //TODO que?
 			{
 				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
 					if ( ! str.compare((*it_s).simbolo) )
@@ -1074,6 +1076,24 @@ void primeira_passagem2(string file_in)
 	}
 }
 
+int procura_simbolo( vector<string>::iterator it)
+{
+	if (tabela_simbolo_vector.size())
+	{
+		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			if ( ! (*it).compare( (*it_s).simbolo) )
+			{
+				return (*it_s).valor;
+			}
+		}
+		return -1;
+	}
+	else
+		return -1;
+}
+
+
 void segunda_passagem(string file_in, string file_out)
 {
 	//*******PRIMEIRA PASSAGEM*******
@@ -1086,7 +1106,7 @@ void segunda_passagem(string file_in, string file_out)
 	int pc = 0;				//número do endereço equivalente
 
 	int found = 0;
-
+	int symbol_value;
 
 	vector<string>::iterator it;
 	vector<string>::iterator it_end;
@@ -1128,7 +1148,11 @@ void segunda_passagem(string file_in, string file_out)
 					for (int i = 0; i < (*it_i).n_operando ; i++)
 					{
 						++it;
-						aux.push_back(*it);	
+						symbol_value = procura_simbolo( it);
+						if ( symbol_value == -1 )
+							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
+						else
+							aux.push_back(to_string(symbol_value));
 						//TODO corrigir substituiçao de simbolos					
 					}
 				}
@@ -1138,7 +1162,6 @@ void segunda_passagem(string file_in, string file_out)
 		//VERIFICA SE É DIRETIVA
 		if (!found)
 		{
-			cout << endl << str << "    n instruçao " << endl;
 			if ( ! str.compare("CONST"))
 			{
 				if ( distance(it,it_end) != 2) 
@@ -1159,9 +1182,7 @@ void segunda_passagem(string file_in, string file_out)
 							aux.push_back(*it);
 					}
 					else
-					{
 						aux.push_back(*it);	
-						cout << "entrou aqui ";}
 				}
 
 			}
@@ -1169,7 +1190,6 @@ void segunda_passagem(string file_in, string file_out)
 			{
 				if ( ! str.compare("SPACE"))
 				{
-					cout << "encontrou SPACE" << endl;
 					++it;
 					if (it != token_vector.end())
 					{
@@ -1262,6 +1282,18 @@ int main(int argc, char *argv[])
 	inicia_tabela_instrucao();
 	primeira_passagem2("teste.pre");
 	//segunda_passagem("teste.teste");
+
+	//TESTE bloco inteiro de teste
+	if (tabela_simbolo_vector.size())
+	{
+		cout << "VALORES DA TABELA DE SIMBOLOS" << endl;
+		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			cout << "Simbolo: " << (*it_s).simbolo << endl << "Valor: " << (*it_s).valor << endl;
+		}
+	}
+
+
 	segunda_passagem("teste.pre", "file_final.txt");
 
 	return 0;

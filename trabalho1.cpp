@@ -980,7 +980,7 @@ void definir_label(string str, int n_address)
 }
 
 
-void primeira_passagem2(string file_in)
+void primeira_passagem(string file_in)
 {
 	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
@@ -1008,10 +1008,10 @@ void primeira_passagem2(string file_in)
 		it = token_vector.begin();
 		str = *it;
 		//VERIFICA SE É LABEL
+		found = 0;
 		if ( str.back() == ':' )
 		{
 			str.erase(std::prev(str.end()));
-			cout << "primeira passagem, encontrou label, o token agora é: " << str << endl; //teste
 			if ( token_vector.size()) //TODO que?
 			{
 				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
@@ -1044,7 +1044,7 @@ void primeira_passagem2(string file_in)
 		{
 			if ( ! str.compare("CONST"))
 			{
-				pc = pc;
+				++pc;
 			}
 			else
 			{
@@ -1052,27 +1052,24 @@ void primeira_passagem2(string file_in)
 				{
 					it++;
 					if (it != token_vector.end())
-						pc = pc + stoi(*it) -1;
+					{
+						pc = pc + stoi(*it);
+						cout << *it << endl;
+						cout << stoi(*it) << endl;
+					}
+					else
+						pc++;
 				}
 				else
 				{
 					if ( ! str.compare("SECTION"))
-					{
-						pc=pc;
-					}
+						pc = pc;
 					else
-					{
 						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
-					}
 				}
 			}
 		}
 		++ n_linha;
-	}
-
-	for (vector<tabela_simbolo>::iterator it = tabela_simbolo_vector.begin(); it != tabela_simbolo_vector.end(); ++it)
-	{
-		cout << endl<< (*it).simbolo <<endl;
 	}
 }
 
@@ -1275,13 +1272,16 @@ int main(int argc, char *argv[])
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 
-	//montagem("bin.pre","bin.teste");
-	//montagem("teste.pre", "teste.teste");
-	//montagem2("teste.pre", "teste.teste");
+
+
+	//FUNÇOES DA MONTAGEM
+	//todo juntar tudo em uma funcao
+	string file_o = argv[3]; 
+	string file_out = file_o + ".txt"; //todo trocar pra '.o'
+
 	inicia_tabela_diretiva();
 	inicia_tabela_instrucao();
-	primeira_passagem2("teste.pre");
-	//segunda_passagem("teste.teste");
+	primeira_passagem("bin.pre");  //todo substituir o nome do arquivo de entrada
 
 	//TESTE bloco inteiro de teste
 	if (tabela_simbolo_vector.size())
@@ -1292,9 +1292,9 @@ int main(int argc, char *argv[])
 			cout << "Simbolo: " << (*it_s).simbolo << endl << "Valor: " << (*it_s).valor << endl;
 		}
 	}
+	segunda_passagem("bin.pre", file_out);
 
 
-	segunda_passagem("teste.pre", "file_final.txt");
 
 	return 0;
 }

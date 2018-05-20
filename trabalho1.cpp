@@ -1637,7 +1637,13 @@ void segunda_passagem(string file_in, string file_out)
 	ofile.close();
 }
 
-
+void montagem (string filein, string fileout)
+{
+	inicia_tabela_diretiva();
+	inicia_tabela_instrucao();
+	primeira_passagem(filein);
+	segunda_passagem(filein, fileout);	
+}
 
 int main(int argc, char *argv[])
 {
@@ -1680,7 +1686,11 @@ int main(int argc, char *argv[])
 	{
 		pre_procesamento(argv[3], lineachousection);
 		expande_macro(argv[3]);
-		//montagem(argv[3]);
+		//FUNÇOES DA MONTAGEM
+		string file_ = argv[3];
+		file_in = file_ + ".mcr";
+		string file_out = file_ + ".txt"; //todo trocar pra '.o'
+		montagem(file_in,file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}
 
@@ -1689,16 +1699,6 @@ int main(int argc, char *argv[])
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 
-
-
-	//FUNÇOES DA MONTAGEM
-	//todo juntar tudo em uma funcao
-	string file_o = argv[3]; 
-	string file_out = file_o + ".txt"; //todo trocar pra '.o'
-
-	inicia_tabela_diretiva();
-	inicia_tabela_instrucao();
-	primeira_passagem("bin.pre");  //todo substituir o nome do arquivo de entrada
 
 	//TESTE bloco inteiro de teste
 	if (tabela_simbolo_vector.size())
@@ -1709,9 +1709,7 @@ int main(int argc, char *argv[])
 			cout << "Simbolo: " << (*it_s).simbolo << endl << "Valor: " << (*it_s).valor << endl;
 		}
 	}
-	segunda_passagem("bin.pre", file_out);
-
-
-
+	
 	return 0;
 }
+

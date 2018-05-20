@@ -23,6 +23,131 @@
 
 using namespace std;
 
+//DEFINIÇÃO DE STRUCTS
+typedef struct tabela_simbolo
+{
+	string simbolo;
+	int valor;
+} tabela_simbolo;
+
+typedef struct tabela_instrucao
+{
+  string mnemonico;
+  string opcode; 
+  int n_operando;
+} tabela_instrucao;
+
+typedef struct tabela_diretiva
+{
+	string mnemonico;
+	int n_operando;
+} tabela_diretiva;
+
+
+//DEFINIÇÃO DAS TABELAS
+vector<tabela_simbolo> tabela_simbolo_vector;
+
+vector<tabela_instrucao> tabela_instrucao_vector;
+
+vector<tabela_diretiva> tabela_diretiva_vector;
+
+
+
+//INICIALIZAÇÃO DAS TABELAS
+//*****TABELA DE INSTRUÇÕES
+void inicia_tabela_instrucao()
+{
+	tabela_instrucao temp;
+
+	temp.mnemonico = "ADD";
+	temp.opcode = "01";
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "SUB";
+	temp.opcode = "02";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "MULT";
+	temp.opcode = "03";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "DIV";
+	temp.opcode = "04";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMP";
+	temp.opcode = "05";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPN";
+	temp.opcode = "06";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPP";
+	temp.opcode = "07";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "JMPZ";
+	temp.opcode = "08";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "COPY";
+	temp.opcode = "09";
+	temp.n_operando = 2  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "LOAD";
+	temp.opcode = "10";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "STORE";
+	temp.opcode = "11";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "INPUT";
+	temp.opcode = "12";
+	temp.n_operando = 1  ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "OUTPUT";
+	temp.opcode = "13";
+	temp.n_operando = 1 ;
+	tabela_instrucao_vector.push_back(temp); 
+
+	temp.mnemonico = "STOP";
+	temp.opcode = "14";
+	temp.n_operando = 0 ;
+	tabela_instrucao_vector.push_back(temp); 
+}
+
+void inicia_tabela_diretiva()
+{
+	tabela_diretiva temp2;
+
+	temp2.mnemonico = "SECTION";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+
+	temp2.mnemonico = "SPACE";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+
+	temp2.mnemonico = "CONST";
+	temp2.n_operando = 1;
+	tabela_diretiva_vector.push_back(temp2); 
+}
+
+
 bool file_exist(std::string fileName)
 {
 	//fileName = fileName + ".asm" ;
@@ -1236,9 +1361,8 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 				{
 					if ((*it3) == ':')
 					{
-						if ((*it).back() == (*it3))
-							(*it).erase(std::prev((*it).end()));
-						else
+						//se for primeira string e ':' no final, então ok. Se não for isso erro
+						if (!( ( it == token_vector.begin() ) &&  ((*it).back() == (*it3)) ) )
 							printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
 					}
 					else
@@ -1263,25 +1387,257 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 	}
 }
 
-void montagem(string file_in, string file_out)
-{
 
+void definir_label(string str, int n_address)
+{
+	tabela_simbolo temp;
+	temp.simbolo = str;
+	temp.valor = n_address;
+	tabela_simbolo_vector.push_back(temp);
+}
+
+
+void primeira_passagem(string file_in)
+{
+	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;
+	string str;
 
-	//Cria arquivo de saída
-	ofstream outputFile(file_out);
+	int n_linha = 1;		//número da linha do programa
+	int pc = 0;				//número do endereço equivalente
 
-	int n_linha = 0;
-	//While lê arquivo de entrada até o arquivo acabar.
+	int simbolo_redefinido = 0;
+	int found = 0;
+
+	vector<string>::iterator it;
+
+	//Cria arquivo intermediario
+	//ofstream ofile("file_inter.txt");
+	//While lê arquivo de entrada até o arquivo acabar
 	while (std::getline(infile, line))
 	{
-		n_linha++;
+
+		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
-		//até aqui o programa leu uma linha, separou os token em um vector<string> e fez análise léxica
+	
+		it = token_vector.begin();
+		str = *it;
+		//VERIFICA SE É LABEL
+		found = 0;
+		if ( str.back() == ':' )
+		{
+			str.erase(std::prev(str.end()));
+			if ( token_vector.size()) //TODO que?
+			{
+				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+					if ( ! str.compare((*it_s).simbolo) )
+					{
+						printf("Erro Semântico! \n Símbolo redefinido. \n Linha: %d \n", n_linha);
+						simbolo_redefinido = 1;
+					}
+				if (! simbolo_redefinido)
+				{
+					//str.erase(std::prev(str.end()));
+					definir_label(str,pc);
+				}
+			}
+			if (token_vector.size()>1)
+				++it;
+				str = *it;
+		}
+		//VERIFICA SE É INSTRUÇÃO
+		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
+		{
+			if ( ! str.compare( (*it_i).mnemonico) )
+			{
+				pc = pc + (*it_i).n_operando + 1;
+				found =1;		
+			}
+		}
+		//VERIFICA SE É DIRETIVA
+		if (!found)
+		{
+			if ( ! str.compare("CONST"))
+			{
+				++pc;
+			}
+			else
+			{
+				if ( ! str.compare("SPACE"))
+				{
+					it++;
+					if (it != token_vector.end())
+					{
+						pc = pc + stoi(*it);
+						cout << *it << endl;
+						cout << stoi(*it) << endl;
+					}
+					else
+						pc++;
+				}
+				else
+				{
+					if ( ! str.compare("SECTION"))
+						pc = pc;
+					else
+						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
+				}
+			}
+		}
+		++ n_linha;
 	}
 }
+
+int procura_simbolo( vector<string>::iterator it)
+{
+	if (tabela_simbolo_vector.size())
+	{
+		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			if ( ! (*it).compare( (*it_s).simbolo) )
+			{
+				return (*it_s).valor;
+			}
+		}
+		return -1;
+	}
+	else
+		return -1;
+}
+
+
+void segunda_passagem(string file_in, string file_out)
+{
+	//*******PRIMEIRA PASSAGEM*******
+	std::ifstream infile(file_in);
+	std::string line;
+	string str;
+
+
+	int n_linha = 1;		//número da linha do programa
+	int pc = 0;				//número do endereço equivalente
+
+	int found = 0;
+	int symbol_value;
+
+	vector<string>::iterator it;
+	vector<string>::iterator it_end;
+
+	vector<string> aux;
+	//Cria arquivo intermediario
+	ofstream ofile(file_out);
+	//While lê arquivo de entrada até o arquivo acabar
+	while (std::getline(infile, line))
+	{
+
+		//ANÁLISE LÉXICA
+		vector<string> token_vector = separate_tokens(line);
+		lexer(token_vector, n_linha);
+	
+		it = token_vector.begin();
+		it_end = token_vector.end();
+		str = *it;
+		//VERIFICA SE É LABEL
+		if ( str.back() == ':' )
+		{
+			if (token_vector.size()>1)
+				++it;
+				str = *it;
+		}
+		//VERIFICA SE É INSTRUÇÃO
+		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
+		{
+			if ( ! str.compare( (*it_i).mnemonico) )
+			{			
+				if ( distance(it,it_end) != ((*it_i).n_operando + 1) )
+				{
+					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
+					//todo o que fazer?
+				}
+				else
+				{
+					aux.push_back((*it_i).opcode);
+					for (int i = 0; i < (*it_i).n_operando ; i++)
+					{
+						++it;
+						symbol_value = procura_simbolo( it);
+						if ( symbol_value == -1 )
+							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
+						else
+							aux.push_back(to_string(symbol_value));
+						//TODO corrigir substituiçao de simbolos					
+					}
+				}
+				found = 1;		
+			}
+		}
+		//VERIFICA SE É DIRETIVA
+		if (!found)
+		{
+			if ( ! str.compare("CONST"))
+			{
+				if ( distance(it,it_end) != 2) 
+				{
+					printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
+				} 
+				else
+				{
+					++it;
+					if ( (*it).size() > 1)
+					{
+						if ((*it).at(1) == 'x')
+						{
+							//todo corrigir hexadecimal
+							aux.push_back( to_string( stoi(*it, nullptr, 0) ) ) ;
+						}
+						else
+							aux.push_back(*it);
+					}
+					else
+						aux.push_back(*it);	
+				}
+
+			}
+			else
+			{
+				if ( ! str.compare("SPACE"))
+				{
+					++it;
+					if (it != token_vector.end())
+					{
+						for (int i = 0; i < stoi (*it) ; i++)
+							aux.push_back("X");
+					}
+					else
+					{
+						aux.push_back("X");
+					}
+						
+				}
+				else
+				{
+					if ( str.compare("SECTION"))
+						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
+				}
+			}
+		}
+		found = 0;
+		for (const auto &e : aux)
+    		ofile << e << " ";
+    	//TODO retirar linha abaixo depois
+    	ofile << endl;
+
+		++ n_linha;
+		token_vector.clear();
+    	aux.clear();
+	}
+	infile.close(); 
+	ofile.close();
+}
+
+
 
 int main(int argc, char *argv[])
 {
@@ -1327,13 +1683,35 @@ int main(int argc, char *argv[])
 		//montagem(argv[3]);
 		//Realiza a montagem do código depois de expandir as macros
 	}
+
 	else
 	{
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 
-	//montagem("bin.pre","bin.teste");
-	montagem("teste.pre", "teste.teste");
+
+
+	//FUNÇOES DA MONTAGEM
+	//todo juntar tudo em uma funcao
+	string file_o = argv[3]; 
+	string file_out = file_o + ".txt"; //todo trocar pra '.o'
+
+	inicia_tabela_diretiva();
+	inicia_tabela_instrucao();
+	primeira_passagem("bin.pre");  //todo substituir o nome do arquivo de entrada
+
+	//TESTE bloco inteiro de teste
+	if (tabela_simbolo_vector.size())
+	{
+		cout << "VALORES DA TABELA DE SIMBOLOS" << endl;
+		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			cout << "Simbolo: " << (*it_s).simbolo << endl << "Valor: " << (*it_s).valor << endl;
+		}
+	}
+	segunda_passagem("bin.pre", file_out);
+
+
 
 	return 0;
 }

@@ -1329,6 +1329,11 @@ void pre_procesamento(char *file_name, int lineachousection)
 	}
 }
 
+int retorna_decimal(string hexadecimal){
+    int x=(int)strtol(hexadecimal.c_str(), 0, 16);
+    return x;
+}
+
 vector<string> separate_tokens(string line)
 {
 	stringstream stream_line(line);
@@ -1587,10 +1592,9 @@ void segunda_passagem(string file_in, string file_out)
 					++it;
 					if ( (*it).size() > 1)
 					{
-						if ((*it).at(1) == 'x')
-						{
-							//todo corrigir hexadecimal
-							aux.push_back( to_string( stoi(*it, nullptr, 0) ) ) ;
+						if((*it).find("0X") == 0)
+						{ 
+							aux.push_back( to_string(  retorna_decimal(*it)    ) ) ;
 						}
 						else
 							aux.push_back(*it);

@@ -343,7 +343,7 @@ int leargumentos(string argumentos)
 	//para cada retorno a função que chama essa ativa uma rotina diferente
 	argumentos = argumentos.substr(1, argumentos.size());
 	int i = 0, n = 0, m = 0, l = 0;
-	cout << "Chamou a função e está retornando o que foi recebido pela função:" << argumentos << endl;
+	//cout << "Chamou a função e está retornando o que foi recebido pela função:" << argumentos << endl;
 
 	//se não encontrar a virgula verifica se tem o '&', se não tiver retorna 0
 	//se encontrar entra em uma rotina que conta a quantidade de vírgulas que tem, para saber quantos argumentos tem.
@@ -382,7 +382,7 @@ int leargumentos(string argumentos)
 
 	if (n == 0)
 	{
-		cout << "A expressão tem " << m << " argumentos" << endl;
+		//cout << "A expressão tem " << m << " argumentos" << endl;
 		if (m == 1)
 		{
 			return 1;
@@ -395,7 +395,7 @@ int leargumentos(string argumentos)
 	}
 	else if (n == 1)
 	{
-		cout << "A expressão tem " << m << " argumentos" << endl;
+		//cout << "A expressão tem " << m << " argumentos" << endl;
 		if (m == 2)
 		{
 			return 2;
@@ -408,7 +408,7 @@ int leargumentos(string argumentos)
 	}
 	else if (n == 2)
 	{
-		cout << "A expressão tem " << m << " argumentos" << endl;
+		//cout << "A expressão tem " << m << " argumentos" << endl;
 		if (m == 3)
 		{
 			return 3;
@@ -421,7 +421,7 @@ int leargumentos(string argumentos)
 	}
 	else if (n == 3)
 	{
-		cout << "A expressão tem " << m << " argumentos" << endl;
+		//cout << "A expressão tem " << m << " argumentos" << endl;
 		if (m == 4)
 		{
 			return 4;
@@ -438,28 +438,28 @@ string troca_a_linha_macro(string line, string linha_aux, string linha_aux_macro
 {
 
 	string variavel, variavel_macro;
-	cout << "Entrou na função de troca de linha da macro" << endl;
-	cout << "A linha a ser analisada: " << line << endl;
-	cout << "A variável que será buscada: " << linha_aux << endl;
-	cout << "A variável que vai ser substituída: " << linha_aux_macro << endl;
+	//cout << "Entrou na função de troca de linha da macro" << endl;
+	//cout << "A linha a ser analisada: " << line << endl;
+	//cout << "A variável que será buscada: " << linha_aux << endl;
+	//cout << "A variável que vai ser substituída: " << linha_aux_macro << endl;
 
 	//procura pelo valor do primeiro argumento
-	cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
+	//cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
 	variavel = linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(","));
 	linha_aux_macro = linha_aux_macro.substr(linha_aux_macro.find(",") + 1, linha_aux_macro.size());
 	//procura pelo valor do primeiro argumento
-	cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
+	//cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
 	variavel_macro = linha_aux.substr(0, linha_aux.find(","));
 	linha_aux = linha_aux.substr(linha_aux.find(",") + 1, linha_aux.size());
 
 	if (line.find(variavel) != line.npos)
 	{
-		cout << "Encontrou esse argumento na função interna a macro" << endl;
-		cout << variavel << endl;
-		cout << variavel_macro << endl;
-		cout << line << endl;
+		//cout << "Encontrou esse argumento na função interna a macro" << endl;
+		//cout << variavel << endl;
+		//cout << variavel_macro << endl;
+		//cout << line << endl;
 		line.replace(line.find(variavel), variavel.size(), variavel_macro);
-		cout << "Aqui está: " << line << endl;
+		//cout << "Aqui está: " << line << endl;
 	}
 
 	//aqui passamos a linha, o argumento que deve ser mudado e o que vai substituir para uma função
@@ -468,61 +468,61 @@ string troca_a_linha_macro(string line, string linha_aux, string linha_aux_macro
 	//ao final de tudo escreve em a função no arquivo .mcr
 
 	//procura pelo valor do segundo argumento
-	cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
+	//cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
 	//cout << linha_aux_macro.substr(linha_aux_macro.find("&")+1,linha_aux_macro.find(",")) << endl;
 	variavel = linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(","));
 	linha_aux_macro = linha_aux_macro.substr(linha_aux_macro.find(",") + 1, linha_aux_macro.size());
 	//procura pelo valor do segundo argumento
 	variavel_macro = linha_aux.substr(0, linha_aux.find(","));
-	cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
+	//cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
 	linha_aux = linha_aux.substr(linha_aux.find(",") + 1, linha_aux.size());
 
 	if (line.find(variavel) != line.npos)
 	{
-		cout << "Encontrou esse argumento na função interna a macro" << endl;
-		cout << variavel << endl;
-		cout << variavel_macro << endl;
-		cout << line << endl;
+		//cout << "Encontrou esse argumento na função interna a macro" << endl;
+		//cout << variavel << endl;
+		//cout << variavel_macro << endl;
+		//cout << line << endl;
 		line.replace(line.find(variavel), variavel.size(), variavel_macro);
-		cout << "Aqui está: " << line << endl;
+		//cout << "Aqui está: " << line << endl;
 	}
 
 	//procura pelo valor do terceiro argumento
-	cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
+	//cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(",")) << endl;
 	variavel = linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find(","));
 
 	linha_aux_macro = linha_aux_macro.substr(linha_aux_macro.find(",") + 1, linha_aux_macro.size());
 	//procura pelo valor do terceiro argumento
 	variavel_macro = linha_aux.substr(0, linha_aux.find(","));
 
-	cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
+	//cout << linha_aux.substr(0, linha_aux.find(",")) << endl;
 	linha_aux = linha_aux.substr(linha_aux.find(",") + 1, linha_aux.size());
 
 	if (line.find(variavel) != line.npos)
 	{
-		cout << "Encontrou esse argumento na função interna a macro" << endl;
-		cout << variavel << endl;
-		cout << variavel_macro << endl;
-		cout << line << endl;
+		//cout << "Encontrou esse argumento na função interna a macro" << endl;
+		//cout << variavel << endl;
+		//cout << variavel_macro << endl;
+		//cout << line << endl;
 		line.replace(line.find(variavel), variavel.size(), variavel_macro);
-		cout << "Aqui está: " << line << endl;
+		//cout << "Aqui está: " << line << endl;
 	}
 
 	//procura pelo valor do quarto argumento
-	cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find("\n")) << endl;
+	//cout << linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find("\n")) << endl;
 	variavel = linha_aux_macro.substr(linha_aux_macro.find("&"), linha_aux_macro.find("\n"));
 	//procura pelo valor do quarto argumento
 	variavel_macro = linha_aux.substr(0, linha_aux.find("\n"));
-	cout << linha_aux.substr(0, linha_aux.find("\n")) << endl;
+	//cout << linha_aux.substr(0, linha_aux.find("\n")) << endl;
 
 	if (line.find(variavel) != line.npos)
 	{
-		cout << "Encontrou esse argumento na função interna a macro" << endl;
-		cout << variavel << endl;
-		cout << variavel_macro << endl;
-		cout << line << endl;
+		//cout << "Encontrou esse argumento na função interna a macro" << endl;
+		//cout << variavel << endl;
+		//cout << variavel_macro << endl;
+		//cout << line << endl;
 		line.replace(line.find(variavel), variavel.size(), variavel_macro);
-		cout << "Aqui está: " << line << endl;
+		//cout << "Aqui está: " << line << endl;
 	}
 
 	return line;
@@ -530,7 +530,7 @@ string troca_a_linha_macro(string line, string linha_aux, string linha_aux_macro
 
 int verifica_argumento_macro(string saida, string argumento)
 {
-	cout << "Vamos analisar se essa linha contém uma macro....." << endl;
+	//cout << "Vamos analisar se essa linha contém uma macro....." << endl;
 	int numero = 0;
 	//ofstream mntfile("MNT", ios::app);
 	//ofstream mdtfile("MDT", ios::app);
@@ -539,7 +539,7 @@ int verifica_argumento_macro(string saida, string argumento)
 	string nome, line, comparar;
 	nome = saida.substr(0, saida.size() - 4);
 	ofstream menosm(nome.append(".mcr"), ios::app);
-	cout << nome << endl;
+	//cout << nome << endl;
 
 	string linha, mntbusca, mdtbusca, token, num_de_args, linha_aux, macro_achada, linha_aux_macro;
 	int i, n = 0, m = 0, l = 0, contador = 0, flag, bandeira;
@@ -562,7 +562,7 @@ int verifica_argumento_macro(string saida, string argumento)
 	}
 	else if (n == 0)
 	{
-		cout << argumento << endl;
+		//cout << argumento << endl;
 	}
 	argumento = argumento.substr(0, argumento.find(" "));
 	//aqui começa a checar na tabela MNT se existe a macro
@@ -576,21 +576,21 @@ int verifica_argumento_macro(string saida, string argumento)
 
 			token = argumento;
 			size_t postab = mntbusca.find("\t");
-			cout << "Token aqui: " << token << endl;
-			cout << "mntbusca: " << mntbusca << endl;
+			//cout << "Token aqui: " << token << endl;
+			//cout << "mntbusca: " << mntbusca << endl;
 			mdtbusca = mntbusca.substr(0, postab);
-			cout << "mdtbusca: " << mdtbusca << endl;
-			cout << mdtbusca.compare(token) << endl;
+			//cout << "mdtbusca: " << mdtbusca << endl;
+			//cout << mdtbusca.compare(token) << endl;
 			//Se achou um possível membro das macros então pode expandir
 			//analisa se tem mais de um argumento, se sim resolve eles aqui... caso contrário deixa como tava.
 
 			if (mdtbusca.compare(token) == 0)
 			{
 				//agora é necessário descobrir quantos argumentos essa função tem
-				cout << "Para descobrir a quantidade de argumentos é necessário usar a linha: " << mntbusca << endl;
+				//cout << "Para descobrir a quantidade de argumentos é necessário usar a linha: " << mntbusca << endl;
 				num_de_args = mntbusca.substr(mntbusca.find("\t") + 1, mntbusca.size());
 				num_de_args = num_de_args.substr(0, mntbusca.find("\t") - 3);
-				cout << num_de_args << endl;
+				//cout << num_de_args << endl;
 				//assim eu tenho a quantidade de argumentos mínima que eu tenho que ter na chamada dessa linha
 				n = 0;
 				l = 0;
@@ -625,13 +625,13 @@ int verifica_argumento_macro(string saida, string argumento)
 					if (num_de_args == "1")
 					{
 						numero = 1;
-						cout << "Acertou a quantidade de argumentos 1 ................................." << endl;
-						cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
+						//cout << "Acertou a quantidade de argumentos 1 ................................." << endl;
+						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
 						bandeira=0;
-						cout << line << endl;
+						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						cout << token + ": MACRO" << endl;
+						//cout << token + ": MACRO" << endl;
 						while((getline(meufile, line))&&(bandeira==0))
 						{
 							string busca = token + ": MACRO ";
@@ -642,7 +642,7 @@ int verifica_argumento_macro(string saida, string argumento)
 							getline(meufile, line);
 							//cout << line << endl;
 						}
-						cout << line << endl;
+						//cout << line << endl;
 						while (line != termina)
 						{
 							//cout << line << endl;
@@ -653,9 +653,9 @@ int verifica_argumento_macro(string saida, string argumento)
 								comparar = line.substr(0, line.find(":"));
 								if (comparar == mdtbusca)
 								{
-									cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
+									//cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
 									macro_achada = line.substr(line.find("MACRO") + 6, line.size());
-									cout << "encontrou a definição da macro desejada" << endl;
+									//cout << "encontrou a definição da macro desejada" << endl;
 									flag = 1;
 								}
 							}
@@ -663,15 +663,15 @@ int verifica_argumento_macro(string saida, string argumento)
 							{
 								//aqui nessa parte tem que ser feito a análise de cada argumento da macro
 								//no caso são 4 argumentos, então que procurar em cada linha os argumentos que já temos
-								cout << line << endl;
-								cout << macro_achada << endl;
-								cout << linha << endl;
+								//cout << line << endl;
+								//cout << macro_achada << endl;
+								//cout << linha << endl;
 								linha_aux = linha;
 								linha_aux_macro = macro_achada;
 
 								string linha_retornada = troca_a_linha_macro(line, linha_aux, linha_aux_macro);
 
-								cout << "Retorno da Função: " << linha_retornada << endl;
+								//cout << "Retorno da Função: " << linha_retornada << endl;
 
 								//aqui escreve no arquivo .MCR
 								if (menosm.is_open())
@@ -705,12 +705,12 @@ int verifica_argumento_macro(string saida, string argumento)
 					if (num_de_args == "2")
 					{
 						numero = 2;
-						cout << "Acertou a quantidade de argumentos 2 ................................." << endl;
-						cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
+						//cout << "Acertou a quantidade de argumentos 2 ................................." << endl;
+						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						cout << token << endl;
+						//cout << token << endl;
 						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
 						{
 							getline(meufile, line);
@@ -725,9 +725,9 @@ int verifica_argumento_macro(string saida, string argumento)
 								comparar = line.substr(0, line.find(":"));
 								if (comparar == mdtbusca)
 								{
-									cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
+									//cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
 									macro_achada = line.substr(line.find("MACRO") + 6, line.size());
-									cout << "encontrou a definição da macro desejada" << endl;
+									//cout << "encontrou a definição da macro desejada" << endl;
 									flag = 1;
 								}
 							}
@@ -735,15 +735,15 @@ int verifica_argumento_macro(string saida, string argumento)
 							{
 								//aqui nessa parte tem que ser feito a análise de cada argumento da macro
 								//no caso são 4 argumentos, então que procurar em cada linha os argumentos que já temos
-								cout << line << endl;
-								cout << macro_achada << endl;
-								cout << linha << endl;
+								//cout << line << endl;
+								//cout << macro_achada << endl;
+								//cout << linha << endl;
 								linha_aux = linha;
 								linha_aux_macro = macro_achada;
 
 								string linha_retornada = troca_a_linha_macro(line, linha_aux, linha_aux_macro);
 
-								cout << "Retorno da Função: " << linha_retornada << endl;
+								//cout << "Retorno da Função: " << linha_retornada << endl;
 
 								//aqui escreve no arquivo .MCR
 								if (menosm.is_open())
@@ -776,12 +776,12 @@ int verifica_argumento_macro(string saida, string argumento)
 					if (num_de_args == "3")
 					{
 						numero = 3;
-						cout << "Acertou a quantidade de argumentos 3 ................................." << endl;
-						cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
+						//cout << "Acertou a quantidade de argumentos 3 ................................." << endl;
+						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						cout << token << endl;
+						//cout << token << endl;
 						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
 						{
 							getline(meufile, line);
@@ -796,9 +796,9 @@ int verifica_argumento_macro(string saida, string argumento)
 								comparar = line.substr(0, line.find(":"));
 								if (comparar == mdtbusca)
 								{
-									cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
+									//cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
 									macro_achada = line.substr(line.find("MACRO") + 6, line.size());
-									cout << "encontrou a definição da macro desejada" << endl;
+									//cout << "encontrou a definição da macro desejada" << endl;
 									flag = 1;
 								}
 							}
@@ -806,15 +806,15 @@ int verifica_argumento_macro(string saida, string argumento)
 							{
 								//aqui nessa parte tem que ser feito a análise de cada argumento da macro
 								//no caso são 4 argumentos, então que procurar em cada linha os argumentos que já temos
-								cout << line << endl;
-								cout << macro_achada << endl;
-								cout << linha << endl;
+								//cout << line << endl;
+								//cout << macro_achada << endl;
+								//cout << linha << endl;
 								linha_aux = linha;
 								linha_aux_macro = macro_achada;
 
 								string linha_retornada = troca_a_linha_macro(line, linha_aux, linha_aux_macro);
 
-								cout << "Retorno da Função: " << linha_retornada << endl;
+								//cout << "Retorno da Função: " << linha_retornada << endl;
 
 								//aqui escreve no arquivo .MCR
 								if (menosm.is_open())
@@ -847,12 +847,12 @@ int verifica_argumento_macro(string saida, string argumento)
 					if (num_de_args == "4")
 					{
 						numero = 4;
-						cout << "Acertou a quantidade de argumentos 4 ................................." << endl;
-						cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
+						//cout << "Acertou a quantidade de argumentos 4 ................................." << endl;
+						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						cout << token << endl;
+						//cout << token << endl;
 						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
 						{
 							getline(meufile, line);
@@ -860,7 +860,7 @@ int verifica_argumento_macro(string saida, string argumento)
 
 						while (line != termina)
 						{
-							cout << line << endl;
+							//cout << line << endl;
 							//se encontrar os : então entra no laço a procura pela macro
 							size_t poscom = line.find("MACRO");
 							if (poscom != line.npos)
@@ -868,9 +868,9 @@ int verifica_argumento_macro(string saida, string argumento)
 								comparar = line.substr(0, line.find(":"));
 								if (comparar == mdtbusca)
 								{
-									cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
+									//cout << line.substr(line.find("MACRO") + 6, line.size()) << endl;
 									macro_achada = line.substr(line.find("MACRO") + 6, line.size());
-									cout << "encontrou a definição da macro desejada" << endl;
+									//cout << "encontrou a definição da macro desejada" << endl;
 									flag = 1;
 								}
 							}
@@ -878,15 +878,15 @@ int verifica_argumento_macro(string saida, string argumento)
 							{
 								//aqui nessa parte tem que ser feito a análise de cada argumento da macro
 								//no caso são 4 argumentos, então que procurar em cada linha os argumentos que já temos
-								cout << line << endl;
-								cout << macro_achada << endl;
-								cout << linha << endl;
+								//cout << line << endl;
+								//cout << macro_achada << endl;
+								//cout << linha << endl;
 								linha_aux = linha;
 								linha_aux_macro = macro_achada;
 
 								string linha_retornada = troca_a_linha_macro(line, linha_aux, linha_aux_macro);
 
-								cout << "Retorno da Função: " << linha_retornada << endl;
+								//cout << "Retorno da Função: " << linha_retornada << endl;
 
 								//aqui escreve no arquivo .MCR
 								if (menosm.is_open())
@@ -933,9 +933,9 @@ int verifica_argumento_macro(string saida, string argumento)
 
 void expande_macro(char *file_name)
 {
-
+	cout << "Começando a fazer o pre processamento do arquivo: ";
 	string nome;
-	//cout<<file_name << endl;
+	cout<<file_name << ".pre"<< endl;
 	nome = file_name;
 	nome = nome.substr(0, nome.size());
 	//cout << nome;
@@ -963,24 +963,24 @@ void expande_macro(char *file_name)
 			size_t poscom = line.find("MACRO");
 			if (poscom != line.npos)
 			{
-				cout << "\nTem uma MACRO aqui \n\n";
+				//cout << "\nTem uma MACRO aqui \n\n";
 				//salva aqui o nome das MACROS definidas no código
 				//Chama uma rotina para salvar em um arquivo o nome da macro, a quantidade de parametros e a linha que será adicionada na MDT
 				//Pega a linha em que foi achada a macro, e encontra o nome que vem antes dos ':'
 				poscom = line.find(":");
-				cout << "Mostrando a posição na linha que o nome macro está: " << line.find("MACRO") << endl;
+				//cout << "Mostrando a posição na linha que o nome macro está: " << line.find("MACRO") << endl;
 				inicio_argumentos = line.find("MACRO") + 5;
-				cout << "Mostrando o inicio dos argumentos da macro: " << inicio_argumentos << endl;
+				//cout << "Mostrando o inicio dos argumentos da macro: " << inicio_argumentos << endl;
 				nomedamacro = line.substr(0, poscom);
-				cout << nomedamacro << endl;
-				cout << "Mostrando a quantidade de argumentos da MACRO:" << line.substr(inicio_argumentos, (line.size() - inicio_argumentos)) << endl;
+				//cout << nomedamacro << endl;
+				//cout << "Mostrando a quantidade de argumentos da MACRO:" << line.substr(inicio_argumentos, (line.size() - inicio_argumentos)) << endl;
 				argumentos = line.substr(inicio_argumentos, (line.size() - inicio_argumentos));
 				num_argumentos = 0;
 				//aqui chama uma função para contar a quantidade de argumentos da macro 1,2,3 ou 4
 				if (argumentos.size() > 0)
 				{
 					num_argumentos = leargumentos(argumentos);
-					cout << num_argumentos << endl;
+					//cout << num_argumentos << endl;
 				}
 
 				//inicialização da variável que diz qual linha estará o escopo da macro
@@ -996,14 +996,13 @@ void expande_macro(char *file_name)
 					{
 						mdtfile << line << endl;
 						getline(meufile, line);
-						cout << line << endl;
+						//cout << line << endl;
 						comparando = line;
-						cout << "Comparacao: " << comparando.compare(termina) << endl;
+						//cout << "Comparacao: " << comparando.compare(termina) << endl;
 						linhamdt++;
 					} while ((comparando.compare(termina) != 0));
 
-					cout << "\n      finalizou a MACRO      \n"
-						 << endl;
+					//cout << "\n      finalizou a MACRO      \n" << endl;
 				}
 				else
 					cout << "\nArquivo nao pode ser aberto!!!\n\n";
@@ -1011,7 +1010,7 @@ void expande_macro(char *file_name)
 				//Chama uma rotina para salvar em uma tabela o código da macro até o valor ENDMACRO
 				//o nome desse arquivo é MDT(Macro Definition Table)
 				//strcmp(pesq, agen[contador].nome) == 0
-				cout << line << endl;
+				//cout << line << endl;
 			}
 			else
 			{
@@ -1032,11 +1031,11 @@ void expande_macro(char *file_name)
 						{
 							token = line;
 							size_t postab = mntbusca.find("\t");
-							cout << "Token: " << token << endl;
-							cout << "mntbusca: " << mntbusca << endl;
+							//cout << "Token: " << token << endl;
+							//cout << "mntbusca: " << mntbusca << endl;
 							mdtbusca = mntbusca.substr(0, postab);
-							cout << "mdtbusca: " << mdtbusca << endl;
-							cout << mdtbusca.compare(token) << endl;
+							//cout << "mdtbusca: " << mdtbusca << endl;
+							//cout << mdtbusca.compare(token) << endl;
 
 							//Aqui tem que consultar a quantidade de argumentos para ver se é maior que 0, para então chamar uma rotina alternativa
 
@@ -1051,8 +1050,8 @@ void expande_macro(char *file_name)
 								auxiliar = mntbusca.substr(postab + 1, mntbusca.size());
 								postab = auxiliar.find("\t");
 								quantidade_de_argumentos = auxiliar.substr(0, postab);
-								cout << "Quantidade de argumentos:" << auxiliar.substr(0, postab) << endl;
-								cout << "Print a linha:" << line << endl;
+								//cout << "Quantidade de argumentos:" << auxiliar.substr(0, postab) << endl;
+								//cout << "Print a linha:" << line << endl;
 
 								int ia = 0, na = 0, la = 0;
 								for (ia = 0; line[ia] != '\0'; ia++)
@@ -1117,7 +1116,7 @@ void expande_macro(char *file_name)
 								{
 									int tam2 = linhafimacro.size();
 									linhafimacro = linhafimacro.substr(tam2 - 1, tam2);
-									cout << "linha fim da macro:" << linhafimacro << endl;
+									//cout << "linha fim da macro:" << linhafimacro << endl;
 									linhafim = stoi(linhafimacro);
 								}
 
@@ -1131,7 +1130,7 @@ void expande_macro(char *file_name)
 								compara = stoi(linhabusca);
 								//cout << linhabusca << endl;
 								//cout << compara << endl;
-								cout << "linha fim : " << linhafim << endl;
+								//cout << "linha fim : " << linhafim << endl;
 
 								if (mdtfile.is_open())
 								{
@@ -1139,9 +1138,9 @@ void expande_macro(char *file_name)
 									while ((getline(mdtfile, mdtline)) && compara != contador)
 									{
 										contador++;
-										cout << "compara: " << compara << endl;
-										cout << "contador: " << contador << endl;
-										cout << "linha da mdt: " << mdtline << endl;
+										//cout << "compara: " << compara << endl;
+										//cout << "contador: " << contador << endl;
+										//cout << "linha da mdt: " << mdtline << endl;
 									}
 
 									// o arquivo MDT esta exatamente na linha da macro chamada
@@ -1149,14 +1148,14 @@ void expande_macro(char *file_name)
 
 									do
 									{
-										cout << "entrou aqui!" << endl;
+										//cout << "entrou aqui!" << endl;
 										if (menosm.is_open())
 										{
-											cout << mdtline << endl;
+											//cout << mdtline << endl;
 											menosm << mdtline << endl;
 											contador++;
-											cout << "contador: " << contador << endl;
-											cout << "linha fim: " << linhafim << endl;
+											//cout << "contador: " << contador << endl;
+											//cout << "linha fim: " << linhafim << endl;
 										}
 									} while (getline(mdtfile, mdtline) && contador != linhafim);
 								}
@@ -1184,7 +1183,7 @@ void expande_macro(char *file_name)
 				else
 				{
 					// Tem que chamar uma rotina aqui que olha se a linha é de uma macro com argumentos
-					cout << "Pode ser uma macro com argumentos:" << line << endl;
+					//cout << "Pode ser uma macro com argumentos:" << line << endl;
 					//cria uma função que procura pelo rotulo da macro dentro da MNT
 					if (verifica_argumento_macro(saida, line) == 0)
 					{
@@ -1216,7 +1215,7 @@ void pre_procesamento(char *file_name, int lineachousection)
 
 	cout << "Começando a fazer o pre processamento do arquivo: ";
 	string nome;
-	cout << file_name << endl;
+	cout << file_name << ".asm" << endl;
 	nome = file_name;
 	nome = nome.substr(0, nome.size());
 	//nome.append(".pre");
@@ -1256,7 +1255,7 @@ void pre_procesamento(char *file_name, int lineachousection)
 				//Verifica se EQU vem depois de SECTION
 				if (linecounter >= lineachousection)
 				{
-					cout << "\nDiretiva EQU encontrada após a diretiva SECTION na linha " << linecounter << endl;
+					//cout << "\nDiretiva EQU encontrada após a diretiva SECTION na linha " << linecounter << endl;
 				}
 			}
 			else if (line.find("IF") != line.npos)
@@ -1303,7 +1302,7 @@ void pre_procesamento(char *file_name, int lineachousection)
 							{
 								remover = 1;
 								erroequ = 1;
-								cout << "Remover: " << remover << endl;
+								//cout << "Remover: " << remover << endl;
 								getline(meufile, line);
 							}
 							//se for 1 adiciona a linha posterior ao if
@@ -1312,7 +1311,7 @@ void pre_procesamento(char *file_name, int lineachousection)
 					}
 					if (erroequ == 0)
 					{ //Retornando o erro para a resolução de EQU não válida
-						cout << "Valor de EQU válido para " << nomeparam << " não foi encontrado no arquivo, revise o código .asm." << endl;
+						//cout << "Valor de EQU válido para " << nomeparam << " não foi encontrado no arquivo, revise o código .asm." << endl;
 						erroequ = 0;
 					}
 				}
@@ -1668,8 +1667,7 @@ int main(int argc, char *argv[])
 
 	if (string(argv[1]) == "-p")
 	{
-		cout << endl
-			 << "Iniciando o -p" << endl;
+		cout << endl << "Iniciando o -p" << endl;
 		pre_procesamento(argv[3], lineachousection);
 	}
 	else if (string(argv[1]) == "-m")
@@ -1691,7 +1689,7 @@ int main(int argc, char *argv[])
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
 		file_in = file_ + ".mcr";
-		string file_out = file_ + ".txt"; //todo trocar pra '.o'
+		string file_out = file_ + ".o"; //todo trocar pra '.o'
 		montagem(file_in,file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}

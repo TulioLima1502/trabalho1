@@ -1419,6 +1419,7 @@ void primeira_passagem(string file_in)
 	{
 
 		//ANÁLISE LÉXICA
+		//separa os tokens e faz análise léxica
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
 	
@@ -1426,32 +1427,33 @@ void primeira_passagem(string file_in)
 		str = *it;
 		//VERIFICA SE É LABEL
 		found = 0;
-		if ( str.back() == ':' )
+		if ( str.back() == ':' )	//procura no fim do primeiro token ':'
 		{
-			str.erase(std::prev(str.end()));
-			if ( token_vector.size()) //TODO que?
+			str.erase(std::prev(str.end()));	//apaga o ':'
+			if ( token_vector.size()) 		
 			{
+				//percorre toda a tabela de simbolos  comparando o token do arquivo com o simbolo definido na tabela
 				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
-					if ( ! str.compare((*it_s).simbolo) )
+					if ( ! str.compare((*it_s).simbolo) ) //ja está definido na tabela
 					{
 						printf("Erro Semântico! \n Símbolo redefinido. \n Linha: %d \n", n_linha);
-						simbolo_redefinido = 1;
+						simbolo_redefinido = 1; 
 					}
 				if (! simbolo_redefinido)
 				{
 					//str.erase(std::prev(str.end()));
-					definir_label(str,pc);
+					definir_label(str,pc); //inclui arquivo na tabela
 				}
 			}
-			if (token_vector.size()>1)
-				++it;
+			if (token_vector.size()>1) //evitar seg fault
+				++it; //pega o proximo token da linha do arquivo
 				str = *it;
 		}
 		//VERIFICA SE É INSTRUÇÃO
 		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
 		{
 			if ( ! str.compare( (*it_i).mnemonico) )
-			{
+			{ //se for uma instruçao ele atualiza o valor do PC e diz que ja encontrou, pra nao precisar procurar nas diretivas
 				pc = pc + (*it_i).n_operando + 1;
 				found =1;		
 			}
@@ -1469,12 +1471,12 @@ void primeira_passagem(string file_in)
 				{
 					it++;
 					if (it != token_vector.end())
-					{
+					{	//atualiza pc de acordo com o que foi especificado na linah do arquivo
 						pc = pc + stoi(*it);
 						cout << *it << endl;
 						cout << stoi(*it) << endl;
 					}
-					else
+					else //soma so um mesmo
 						pc++;
 				}
 				else
@@ -1491,7 +1493,7 @@ void primeira_passagem(string file_in)
 }
 
 int procura_simbolo( vector<string>::iterator it)
-{
+{	//ße existir um tabela de simbolos, percorre ela toda procurando pelo simbolo. retorna -1 caso nao encontre na tabela
 	if (tabela_simbolo_vector.size())
 	{
 		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
@@ -1542,7 +1544,7 @@ void segunda_passagem(string file_in, string file_out)
 		//VERIFICA SE É LABEL
 		if ( str.back() == ':' )
 		{
-			if (token_vector.size()>1)
+			if (token_vector.size()>1) //pega o proximo token
 				++it;
 				str = *it;
 		}
@@ -1558,7 +1560,7 @@ void segunda_passagem(string file_in, string file_out)
 				}
 				else
 				{
-					aux.push_back((*it_i).opcode);
+					aux.push_back((*it_i).opcode); //coloca o opcode no vetor aux
 					for (int i = 0; i < (*it_i).n_operando ; i++)
 					{
 						++it;
@@ -1566,7 +1568,7 @@ void segunda_passagem(string file_in, string file_out)
 						if ( symbol_value == -1 )
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 						else
-							aux.push_back(to_string(symbol_value));
+							aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 					}
 				}
 				found = 1;		
@@ -1604,9 +1606,9 @@ void segunda_passagem(string file_in, string file_out)
 				if ( ! str.compare("SPACE"))
 				{
 					++it;
-					if (it != token_vector.end())
+					if (it != token_vector.end()) //verifica se tem algum operando na diretiva space
 					{
-						for (int i = 0; i < stoi (*it) ; i++)
+						for (int i = 0; i < stoi (*it) ; i++) //loop reservando espaço até alcançar o valor do argumento 
 							aux.push_back("X");
 					}
 					else
@@ -1623,6 +1625,7 @@ void segunda_passagem(string file_in, string file_out)
 			}
 		}
 		found = 0;
+		//colocar o vetor aux no arquivo final
 		for (const auto &e : aux)
     		ofile << e << " ";
     	//TODO retirar linha abaixo depois

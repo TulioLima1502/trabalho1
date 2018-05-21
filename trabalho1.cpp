@@ -1356,38 +1356,43 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 {
 	for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
 	{
-		string str = *it;
-		if (isalpha(str.at(0)) || (str.at(0) == '_'))
+		if ( (*it).size() < 21)
 		{
-			for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
+			string str = *it;
+			if (isalpha(str.at(0)) || (str.at(0) == '_'))
 			{
-				if (!isdigit(*it3) && !isalpha(*it3) && !((*it3) == '_'))
+				for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
 				{
-					if ((*it3) == ':')
+					if (!isdigit(*it3) && !isalpha(*it3) && !((*it3) == '_'))
 					{
-						//se for primeira string e ':' no final, então ok. Se não for isso erro
-						if (!( ( it == token_vector.begin() ) &&  ((*it).back() == (*it3)) ) )
+						if ((*it3) == ':')
+						{
+							//se for primeira string e ':' no final, então ok. Se não for isso erro
+							if (!( ( it == token_vector.begin() ) &&  ((*it).back() == (*it3)) ) )
+								printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
+						}
+						else
+						{
 							printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
+							break;
+						}
 					}
-					else
+				}
+			}
+			else
+			{
+				for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
+				{
+					if (!isdigit(*it3))
 					{
-						printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
+						printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha);
 						break;
 					}
 				}
 			}
 		}
 		else
-		{
-			for (string::iterator it3 = str.begin(); it3 != str.end(); ++it3)
-			{
-				if (!isdigit(*it3))
-				{
-					printf("Erro léxico! \n Token inválido. Token deve ser iniciado por dígito ou underscore. \n Linha: %d.", n_linha);
-					break;
-				}
-			}
-		}
+			printf("Erro léxico! \n Token inválido. Token deve ter no máximo 20 caracteres. \n Linha: %d.", n_linha);
 	}
 }
 
@@ -1560,7 +1565,6 @@ void segunda_passagem(string file_in, string file_out)
 				if ( distance(it,it_end) != ((*it_i).n_operando + 1) )
 				{
 					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
-					//todo o que fazer?
 				}
 				else
 				{
@@ -1703,16 +1707,6 @@ int main(int argc, char *argv[])
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 
-
-	//TESTE bloco inteiro de teste
-	if (tabela_simbolo_vector.size())
-	{
-		cout << "VALORES DA TABELA DE SIMBOLOS" << endl;
-		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
-		{
-			cout << "Simbolo: " << (*it_s).simbolo << endl << "Valor: " << (*it_s).valor << endl;
-		}
-	}
 	
 	return 0;
 }

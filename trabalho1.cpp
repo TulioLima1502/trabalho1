@@ -1534,7 +1534,7 @@ void segunda_passagem(string file_in, string file_out)
 
 		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
-		lexer(token_vector, n_linha);
+		//lexer(token_vector, n_linha);
 	
 		it = token_vector.begin();
 		it_end = token_vector.end();
@@ -1567,7 +1567,6 @@ void segunda_passagem(string file_in, string file_out)
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 						else
 							aux.push_back(to_string(symbol_value));
-						//TODO corrigir substituiçao de simbolos					
 					}
 				}
 				found = 1;		
@@ -1688,7 +1687,7 @@ int main(int argc, char *argv[])
 		expande_macro(argv[3]);
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
-		file_in = file_ + ".mcr";
+		file_in = file_ + ".MCR";
 		string file_out = file_ + ".txt"; //todo trocar pra '.o'
 		montagem(file_in,file_out);
 		//Realiza a montagem do código depois de expandir as macros

@@ -233,7 +233,7 @@ int lerarquivo(std::string file_name, char *file_name2)
 
 	saida = nome.substr(0, nome.size()) + ".pre";
 	cout << "saida: " << saida << endl;
-	mcr = nome.substr(0, nome.size()) + ".MCR";
+	mcr = nome.substr(0, nome.size()) + ".mcr";
 	//cout << mcr << endl;
 	pontoo = nome.substr(0, nome.size()) + ".o";
 
@@ -538,7 +538,7 @@ int verifica_argumento_macro(string saida, string argumento)
 	ifstream meufile(saida);
 	string nome, line, comparar;
 	nome = saida.substr(0, saida.size() - 4);
-	ofstream menosm(nome.append(".MCR"), ios::app);
+	ofstream menosm(nome.append(".mcr"), ios::app);
 	cout << nome << endl;
 
 	string linha, mntbusca, mdtbusca, token, num_de_args, linha_aux, macro_achada, linha_aux_macro;
@@ -947,7 +947,7 @@ void expande_macro(char *file_name)
 	ifstream meufile(saida);
 	ofstream mntfile("MNT", ios::app);
 	ofstream mdtfile("MDT", ios::app);
-	ofstream menosm(nome.append(".MCR"), ios::app);
+	ofstream menosm(nome.append(".mcr"), ios::app);
 
 	string termina = "ENDMACRO";
 
@@ -1088,28 +1088,28 @@ void expande_macro(char *file_name)
 									}
 									else if ((quantidade_de_argumentos != "1") || (la < 1))
 									{
-										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.MCR' terá erros" << endl;
+										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.mcr' terá erros" << endl;
 									}
 								}
 								else if (na == 1)
 								{
 									if (quantidade_de_argumentos != "2")
 									{
-										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.MCR' terá erros" << endl;
+										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.mcr' terá erros" << endl;
 									}
 								}
 								else if (na == 2)
 								{
 									if (quantidade_de_argumentos != "3")
 									{
-										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.MCR' terá erros" << endl;
+										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.mcr' terá erros" << endl;
 									}
 								}
 								else if (na == 3)
 								{
 									if (quantidade_de_argumentos != "4")
 									{
-										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.MCR' terá erros" << endl;
+										cout << "Erro na quantidade de argumentos.... Programa continuará mas o seu código '.mcr' terá erros" << endl;
 									}
 								}
 

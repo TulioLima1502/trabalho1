@@ -1690,7 +1690,7 @@ int main(int argc, char *argv[])
 		expande_macro(argv[3]);
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
-		file_in = file_ + ".MCR";
+		file_in = file_ + ".mcr";
 		string file_out = file_ + ".txt"; //todo trocar pra '.o'
 		montagem(file_in,file_out);
 		//Realiza a montagem do código depois de expandir as macros

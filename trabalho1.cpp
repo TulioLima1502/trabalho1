@@ -32,9 +32,9 @@ typedef struct tabela_simbolo
 
 typedef struct tabela_instrucao
 {
-  string mnemonico;
-  string opcode; 
-  int n_operando;
+	string mnemonico;
+	string opcode;
+	int n_operando;
 } tabela_instrucao;
 
 typedef struct tabela_diretiva
@@ -43,15 +43,12 @@ typedef struct tabela_diretiva
 	int n_operando;
 } tabela_diretiva;
 
-
 //DEFINIÇÃO DAS TABELAS
 vector<tabela_simbolo> tabela_simbolo_vector;
 
 vector<tabela_instrucao> tabela_instrucao_vector;
 
 vector<tabela_diretiva> tabela_diretiva_vector;
-
-
 
 //INICIALIZAÇÃO DAS TABELAS
 //*****TABELA DE INSTRUÇÕES
@@ -62,72 +59,72 @@ void inicia_tabela_instrucao()
 	temp.mnemonico = "ADD";
 	temp.opcode = "01";
 	temp.n_operando = 1;
-	tabela_instrucao_vector.push_back(temp); 
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "SUB";
 	temp.opcode = "02";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "MULT";
 	temp.opcode = "03";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "DIV";
 	temp.opcode = "04";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "JMP";
 	temp.opcode = "05";
-	temp.n_operando = 1  ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "JMPN";
 	temp.opcode = "06";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "JMPP";
 	temp.opcode = "07";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "JMPZ";
 	temp.opcode = "08";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "COPY";
 	temp.opcode = "09";
-	temp.n_operando = 2  ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 2;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "LOAD";
 	temp.opcode = "10";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "STORE";
 	temp.opcode = "11";
-	temp.n_operando = 1  ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "INPUT";
 	temp.opcode = "12";
-	temp.n_operando = 1  ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "OUTPUT";
 	temp.opcode = "13";
-	temp.n_operando = 1 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 1;
+	tabela_instrucao_vector.push_back(temp);
 
 	temp.mnemonico = "STOP";
 	temp.opcode = "14";
-	temp.n_operando = 0 ;
-	tabela_instrucao_vector.push_back(temp); 
+	temp.n_operando = 0;
+	tabela_instrucao_vector.push_back(temp);
 }
 
 void inicia_tabela_diretiva()
@@ -136,17 +133,16 @@ void inicia_tabela_diretiva()
 
 	temp2.mnemonico = "SECTION";
 	temp2.n_operando = 1;
-	tabela_diretiva_vector.push_back(temp2); 
+	tabela_diretiva_vector.push_back(temp2);
 
 	temp2.mnemonico = "SPACE";
 	temp2.n_operando = 1;
-	tabela_diretiva_vector.push_back(temp2); 
+	tabela_diretiva_vector.push_back(temp2);
 
 	temp2.mnemonico = "CONST";
 	temp2.n_operando = 1;
-	tabela_diretiva_vector.push_back(temp2); 
+	tabela_diretiva_vector.push_back(temp2);
 }
-
 
 bool file_exist(std::string fileName)
 {
@@ -535,7 +531,7 @@ int verifica_argumento_macro(string saida, string argumento)
 	//ofstream mntfile("MNT", ios::app);
 	//ofstream mdtfile("MDT", ios::app);
 
-	ifstream meufile(saida);
+	ifstream meuarquivo(saida);
 	string nome, line, comparar;
 	nome = saida.substr(0, saida.size() - 4);
 	ofstream menosm(nome.append(".mcr"), ios::app);
@@ -628,20 +624,28 @@ int verifica_argumento_macro(string saida, string argumento)
 						//cout << "Acertou a quantidade de argumentos 1 ................................." << endl;
 						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
-						bandeira=0;
+						bandeira = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						//cout << token + ": MACRO" << endl;
-						while((getline(meufile, line))&&(bandeira==0))
+						//cout << token << ": MACRO" << endl;
+						do
 						{
+							getline(meuarquivo, line);
 							string busca = token + ": MACRO ";
-							size_t found=line.find(busca);
-							if(found==line.npos){
-								bandeira=1;
+							if (strstr(line.c_str(), busca.c_str()))
+							{
+								//cout << "entrou aqui" << endl;
+								bandeira = 1;
 							}
-							getline(meufile, line);
+							if (meuarquivo.eof())
+							{
+								bandeira = 1;
+							}
+							//getline(meufile, line);
 							//cout << line << endl;
-						}
+
+						} while (bandeira == 0);
+						//cout << "saiu" << endl;
 						//cout << line << endl;
 						while (line != termina)
 						{
@@ -691,9 +695,8 @@ int verifica_argumento_macro(string saida, string argumento)
 
 								//compara cada uma das variáveis das macros para então fazer a substituição
 							}
-							getline(meufile, line);
+							getline(meuarquivo, line);
 						}
-						
 					}
 					else
 					{
@@ -708,13 +711,31 @@ int verifica_argumento_macro(string saida, string argumento)
 						//cout << "Acertou a quantidade de argumentos 2 ................................." << endl;
 						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
+						bandeira = 0;
+						//cout << line << endl;
+						//cout << line.substr(line.find("")+1,line.size()) << endl;
+						//cout << token << ": MACRO" << endl;
+						do
+						{
+							getline(meuarquivo, line);
+							string busca = token + ": MACRO ";
+							if (strstr(line.c_str(), busca.c_str()))
+							{
+								//cout << "entrou aqui" << endl;
+								bandeira = 1;
+							}
+							if (meuarquivo.eof())
+							{
+								bandeira = 1;
+							}
+							//getline(meufile, line);
+							//cout << line << endl;
+
+						} while (bandeira == 0);
+
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
 						//cout << token << endl;
-						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
-						{
-							getline(meufile, line);
-						}
 						while (line != termina)
 						{
 							//cout << line << endl;
@@ -763,7 +784,7 @@ int verifica_argumento_macro(string saida, string argumento)
 
 								//compara cada uma das variáveis das macros para então fazer a substituição
 							}
-							getline(meufile, line);
+							getline(meuarquivo, line);
 						}
 					}
 					else
@@ -779,13 +800,29 @@ int verifica_argumento_macro(string saida, string argumento)
 						//cout << "Acertou a quantidade de argumentos 3 ................................." << endl;
 						//cout << "Aqui vamos repassar pelo arquivo para pegar a definição da macro e trocar os argumentos por números..." << endl;
 						flag = 0;
+
+						bandeira = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
-						//cout << token << endl;
-						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
+						//cout << token << ": MACRO" << endl;
+						do
 						{
-							getline(meufile, line);
-						}
+							getline(meuarquivo, line);
+							string busca = token + ": MACRO ";
+							if (strstr(line.c_str(), busca.c_str()))
+							{
+								//cout << "entrou aqui" << endl;
+								bandeira = 1;
+							}
+							if (meuarquivo.eof())
+							{
+								bandeira = 1;
+							}
+							//getline(meufile, line);
+							//cout << line << endl;
+
+						} while (bandeira == 0);
+
 						while (line != termina)
 						{
 							//cout << line << endl;
@@ -834,7 +871,7 @@ int verifica_argumento_macro(string saida, string argumento)
 
 								//compara cada uma das variáveis das macros para então fazer a substituição
 							}
-							getline(meufile, line);
+							getline(meuarquivo, line);
 						}
 					}
 					else
@@ -853,11 +890,26 @@ int verifica_argumento_macro(string saida, string argumento)
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
 						//cout << token << endl;
-						while ((getline(meufile, line)) && (line.find(token + ": MACRO") == line.npos))
+bandeira=0;
+						//cout << line << endl;
+						//cout << line.substr(line.find("")+1,line.size()) << endl;
+						//cout << token << ": MACRO" << endl;
+						do
 						{
-							getline(meufile, line);
-						}
-
+							getline(meuarquivo,line);
+							string busca = token + ": MACRO ";
+							if(strstr(line.c_str(),busca.c_str())){
+								//cout << "entrou aqui" << endl;
+								bandeira=1;
+							}
+							if(meuarquivo.eof()){
+								bandeira=1;
+							}
+							//getline(meufile, line);
+							//cout << line << endl;
+							
+						}while(bandeira==0);
+						
 						while (line != termina)
 						{
 							//cout << line << endl;
@@ -906,7 +958,7 @@ int verifica_argumento_macro(string saida, string argumento)
 
 								//compara cada uma das variáveis das macros para então fazer a substituição
 							}
-							getline(meufile, line);
+							getline(meuarquivo, line);
 						}
 						// Abre o arquivo .pre e procura pela tag de macro: e então depois compara se é a macro que procuramos
 						// cria um arquivo auxiliar para com o nome MDT_"nome da macro"
@@ -922,7 +974,7 @@ int verifica_argumento_macro(string saida, string argumento)
 		//mdtfile.close();
 		mntfile.close();
 		menosm.close();
-		meufile.close();
+		meuarquivo.close();
 		contador = 0;
 	}
 	else
@@ -935,7 +987,7 @@ void expande_macro(char *file_name)
 {
 	cout << "Começando a fazer o pre processamento do arquivo: ";
 	string nome;
-	cout<<file_name << ".pre"<< endl;
+	cout << file_name << ".pre" << endl;
 	nome = file_name;
 	nome = nome.substr(0, nome.size());
 	//cout << nome;
@@ -1329,9 +1381,10 @@ void pre_procesamento(char *file_name, int lineachousection)
 	}
 }
 
-int retorna_decimal(string hexadecimal){
-    int x=(int)strtol(hexadecimal.c_str(), 0, 16);
-    return x;
+int retorna_decimal(string hexadecimal)
+{
+	int x = (int)strtol(hexadecimal.c_str(), 0, 16);
+	return x;
 }
 
 vector<string> separate_tokens(string line)
@@ -1356,7 +1409,7 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 {
 	for (vector<string>::iterator it = token_vector.begin(); it != token_vector.end(); ++it)
 	{
-		if ( (*it).size() < 21)
+		if ((*it).size() < 21)
 		{
 			string str = *it;
 			if (isalpha(str.at(0)) || (str.at(0) == '_'))
@@ -1368,7 +1421,7 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 						if ((*it3) == ':')
 						{
 							//se for primeira string e ':' no final, então ok. Se não for isso erro
-							if (!( ( it == token_vector.begin() ) &&  ((*it).back() == (*it3)) ) )
+							if (!((it == token_vector.begin()) && ((*it).back() == (*it3))))
 								printf("Erro léxico! \n Token inválido. Token deve ser composto por dígitos, letras ou underscore. \n Linha: %d.", n_linha);
 						}
 						else
@@ -1396,7 +1449,6 @@ void lexer(std::vector<std::string> token_vector, int n_linha)
 	}
 }
 
-
 void definir_label(string str, int n_address)
 {
 	tabela_simbolo temp;
@@ -1405,7 +1457,6 @@ void definir_label(string str, int n_address)
 	tabela_simbolo_vector.push_back(temp);
 }
 
-
 void primeira_passagem(string file_in)
 {
 	//*******PRIMEIRA PASSAGEM*******
@@ -1413,8 +1464,8 @@ void primeira_passagem(string file_in)
 	std::string line;
 	string str;
 
-	int n_linha = 1;		//número da linha do programa
-	int pc = 0;				//número do endereço equivalente
+	int n_linha = 1; //número da linha do programa
+	int pc = 0;		 //número do endereço equivalente
 
 	int simbolo_redefinido = 0;
 	int found = 0;
@@ -1431,56 +1482,56 @@ void primeira_passagem(string file_in)
 		//separa os tokens e faz análise léxica
 		vector<string> token_vector = separate_tokens(line);
 		lexer(token_vector, n_linha);
-	
+
 		it = token_vector.begin();
 		str = *it;
 		//VERIFICA SE É LABEL
 		found = 0;
-		if ( str.back() == ':' )	//procura no fim do primeiro token ':'
+		if (str.back() == ':') //procura no fim do primeiro token ':'
 		{
-			str.erase(std::prev(str.end()));	//apaga o ':'
-			if ( token_vector.size()) 		
+			str.erase(std::prev(str.end())); //apaga o ':'
+			if (token_vector.size())
 			{
 				//percorre toda a tabela de simbolos  comparando o token do arquivo com o simbolo definido na tabela
 				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
-					if ( ! str.compare((*it_s).simbolo) ) //ja está definido na tabela
+					if (!str.compare((*it_s).simbolo)) //ja está definido na tabela
 					{
 						printf("Erro Semântico! \n Símbolo redefinido. \n Linha: %d \n", n_linha);
-						simbolo_redefinido = 1; 
+						simbolo_redefinido = 1;
 					}
-				if (! simbolo_redefinido)
+				if (!simbolo_redefinido)
 				{
 					//str.erase(std::prev(str.end()));
-					definir_label(str,pc); //inclui arquivo na tabela
+					definir_label(str, pc); //inclui arquivo na tabela
 				}
 			}
-			if (token_vector.size()>1) //evitar seg fault
-				++it; //pega o proximo token da linha do arquivo
-				str = *it;
+			if (token_vector.size() > 1) //evitar seg fault
+				++it;					 //pega o proximo token da linha do arquivo
+			str = *it;
 		}
 		//VERIFICA SE É INSTRUÇÃO
 		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
 		{
-			if ( ! str.compare( (*it_i).mnemonico) )
+			if (!str.compare((*it_i).mnemonico))
 			{ //se for uma instruçao ele atualiza o valor do PC e diz que ja encontrou, pra nao precisar procurar nas diretivas
 				pc = pc + (*it_i).n_operando + 1;
-				found =1;		
+				found = 1;
 			}
 		}
 		//VERIFICA SE É DIRETIVA
 		if (!found)
 		{
-			if ( ! str.compare("CONST"))
+			if (!str.compare("CONST"))
 			{
 				++pc;
 			}
 			else
 			{
-				if ( ! str.compare("SPACE"))
+				if (!str.compare("SPACE"))
 				{
 					it++;
 					if (it != token_vector.end())
-					{	//atualiza pc de acordo com o que foi especificado na linah do arquivo
+					{ //atualiza pc de acordo com o que foi especificado na linah do arquivo
 						pc = pc + stoi(*it);
 						cout << *it << endl;
 						cout << stoi(*it) << endl;
@@ -1490,24 +1541,24 @@ void primeira_passagem(string file_in)
 				}
 				else
 				{
-					if ( ! str.compare("SECTION"))
+					if (!str.compare("SECTION"))
 						pc = pc;
 					else
 						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
 				}
 			}
 		}
-		++ n_linha;
+		++n_linha;
 	}
 }
 
-int procura_simbolo( vector<string>::iterator it)
-{	//ße existir um tabela de simbolos, percorre ela toda procurando pelo simbolo. retorna -1 caso nao encontre na tabela
+int procura_simbolo(vector<string>::iterator it)
+{ //ße existir um tabela de simbolos, percorre ela toda procurando pelo simbolo. retorna -1 caso nao encontre na tabela
 	if (tabela_simbolo_vector.size())
 	{
-		for(vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
 		{
-			if ( ! (*it).compare( (*it_s).simbolo) )
+			if (!(*it).compare((*it_s).simbolo))
 			{
 				return (*it_s).valor;
 			}
@@ -1518,7 +1569,6 @@ int procura_simbolo( vector<string>::iterator it)
 		return -1;
 }
 
-
 void segunda_passagem(string file_in, string file_out)
 {
 	//*******PRIMEIRA PASSAGEM*******
@@ -1526,9 +1576,8 @@ void segunda_passagem(string file_in, string file_out)
 	std::string line;
 	string str;
 
-
-	int n_linha = 1;		//número da linha do programa
-	int pc = 0;				//número do endereço equivalente
+	int n_linha = 1; //número da linha do programa
+	int pc = 0;		 //número do endereço equivalente
 
 	int found = 0;
 	int symbol_value;
@@ -1546,87 +1595,85 @@ void segunda_passagem(string file_in, string file_out)
 		//ANÁLISE LÉXICA
 		vector<string> token_vector = separate_tokens(line);
 		//lexer(token_vector, n_linha);
-	
+
 		it = token_vector.begin();
 		it_end = token_vector.end();
 		str = *it;
 		//VERIFICA SE É LABEL
-		if ( str.back() == ':' )
+		if (str.back() == ':')
 		{
-			if (token_vector.size()>1) //pega o proximo token
+			if (token_vector.size() > 1) //pega o proximo token
 				++it;
-				str = *it;
+			str = *it;
 		}
 		//VERIFICA SE É INSTRUÇÃO
 		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
 		{
-			if ( ! str.compare( (*it_i).mnemonico) )
-			{			
-				if ( distance(it,it_end) != ((*it_i).n_operando + 1) )
+			if (!str.compare((*it_i).mnemonico))
+			{
+				if (distance(it, it_end) != ((*it_i).n_operando + 1))
 				{
 					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
 				}
 				else
 				{
 					aux.push_back((*it_i).opcode); //coloca o opcode no vetor aux
-					for (int i = 0; i < (*it_i).n_operando ; i++)
+					for (int i = 0; i < (*it_i).n_operando; i++)
 					{
 						++it;
-						symbol_value = procura_simbolo( it);
-						if ( symbol_value == -1 )
+						symbol_value = procura_simbolo(it);
+						if (symbol_value == -1)
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 						else
 							aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 					}
 				}
-				found = 1;		
+				found = 1;
 			}
 		}
 		//VERIFICA SE É DIRETIVA
 		if (!found)
 		{
-			if ( ! str.compare("CONST"))
+			if (!str.compare("CONST"))
 			{
-				if ( distance(it,it_end) != 2) 
+				if (distance(it, it_end) != 2)
 				{
 					printf("Erro Sintático! \n Quantidade de operandos inválida. \n Linha: %d \n", n_linha);
-				} 
+				}
 				else
 				{
 					++it;
-					if ( (*it).size() > 1)
+					if ((*it).size() > 1)
 					{
-						if((*it).find("0X") == 0)
-						{ 
-							aux.push_back( to_string(  retorna_decimal(*it)    ) ) ;
+						if ((*it).find("0X") == 0)
+						{
+							aux.push_back(to_string(retorna_decimal(*it)));
 						}
 						else
 							aux.push_back(*it);
 					}
 					else
-						aux.push_back(*it);	
+						aux.push_back(*it);
 				}
-
 			}
 			else
 			{
-				if ( ! str.compare("SPACE"))
+				if (!str.compare("SPACE"))
 				{
 					++it;
 					if (it != token_vector.end()) //verifica se tem algum operando na diretiva space
 					{
-						for (int i = 0; i < stoi (*it) ; i++) //loop reservando espaço até alcançar o valor do argumento 
+						for (int i = 0; i < stoi(*it); i++) //loop reservando espaço até alcançar o valor do argumento
 							aux.push_back("X");
 					}
 					else
 					{
 						aux.push_back("X");
 					}
-						
 				}
 				else
 				{
-					if ( str.compare("SECTION"))
+					if (str.compare("SECTION"))
 						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
 				}
 			}
@@ -1634,24 +1681,24 @@ void segunda_passagem(string file_in, string file_out)
 		found = 0;
 		//colocar o vetor aux no arquivo final
 		for (const auto &e : aux)
-    		ofile << e << " ";
-    	//TODO retirar linha abaixo depois
-    	ofile << endl;
+			ofile << e << " ";
+		//TODO retirar linha abaixo depois
+		ofile << endl;
 
-		++ n_linha;
+		++n_linha;
 		token_vector.clear();
-    	aux.clear();
+		aux.clear();
 	}
-	infile.close(); 
+	infile.close();
 	ofile.close();
 }
 
-void montagem (string filein, string fileout)
+void montagem(string filein, string fileout)
 {
 	inicia_tabela_diretiva();
 	inicia_tabela_instrucao();
 	primeira_passagem(filein);
-	segunda_passagem(filein, fileout);	
+	segunda_passagem(filein, fileout);
 }
 
 int main(int argc, char *argv[])
@@ -1675,7 +1722,8 @@ int main(int argc, char *argv[])
 
 	if (string(argv[1]) == "-p")
 	{
-		cout << endl << "Iniciando o -p" << endl;
+		cout << endl
+			 << "Iniciando o -p" << endl;
 		pre_procesamento(argv[3], lineachousection);
 	}
 	else if (string(argv[1]) == "-m")
@@ -1698,7 +1746,7 @@ int main(int argc, char *argv[])
 		string file_ = argv[3];
 		file_in = file_ + ".mcr";
 		string file_out = file_ + ".o"; //todo trocar pra '.o'
-		montagem(file_in,file_out);
+		montagem(file_in, file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}
 
@@ -1707,7 +1755,5 @@ int main(int argc, char *argv[])
 		cout << " Comando de execução não encontrado.    ERRO     " << endl;
 	}
 
-	
 	return 0;
 }
-

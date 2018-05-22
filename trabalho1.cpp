@@ -890,26 +890,28 @@ int verifica_argumento_macro(string saida, string argumento)
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
 						//cout << token << endl;
-bandeira=0;
+						bandeira = 0;
 						//cout << line << endl;
 						//cout << line.substr(line.find("")+1,line.size()) << endl;
 						//cout << token << ": MACRO" << endl;
 						do
 						{
-							getline(meuarquivo,line);
+							getline(meuarquivo, line);
 							string busca = token + ": MACRO ";
-							if(strstr(line.c_str(),busca.c_str())){
+							if (strstr(line.c_str(), busca.c_str()))
+							{
 								//cout << "entrou aqui" << endl;
-								bandeira=1;
+								bandeira = 1;
 							}
-							if(meuarquivo.eof()){
-								bandeira=1;
+							if (meuarquivo.eof())
+							{
+								bandeira = 1;
 							}
 							//getline(meufile, line);
 							//cout << line << endl;
-							
-						}while(bandeira==0);
-						
+
+						} while (bandeira == 0);
+
 						while (line != termina)
 						{
 							//cout << line << endl;
@@ -1083,8 +1085,8 @@ void expande_macro(char *file_name)
 						{
 							token = line;
 							size_t postab = mntbusca.find("\t");
-							//cout << "Token: " << token << endl;
-							//cout << "mntbusca: " << mntbusca << endl;
+							cout << "Token: " << token << endl;
+							cout << "mntbusca: " << mntbusca << endl;
 							mdtbusca = mntbusca.substr(0, postab);
 							//cout << "mdtbusca: " << mdtbusca << endl;
 							//cout << mdtbusca.compare(token) << endl;
@@ -1217,13 +1219,14 @@ void expande_macro(char *file_name)
 								}
 							}
 						}
+						cout << token << endl;
 						if (token == "STOP")
 						{ // esse if eh so pra colocar o STOP no .mcr. sem isso o stop nao entra.
 							//cout << "entrou aqui!" << endl;
-							if (menosm.is_open())
-							{
+							//if (menosm.is_open())
+							//{
 								menosm << token << endl;
-							}
+							//}
 						}
 						mdtfile.close();
 						mntfile.close();
@@ -1615,7 +1618,7 @@ void segunda_passagem(string file_in, string file_out)
 				{
 					aux.push_back((*it_i).opcode);
 					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
-					if ( distance(it,it_end) > ((*it_i).n_operando + 1) )
+					if (distance(it, it_end) > ((*it_i).n_operando + 1))
 					{
 						//tem mais operandos do que precisa
 
@@ -1623,11 +1626,11 @@ void segunda_passagem(string file_in, string file_out)
 						//STOP nem entra no laço (0 operandos)
 						//COPY entra no laço 2 vezes
 						//os demais entram no laço 1 vez.
-						for (int i = 0; i < (*it_i).n_operando ; i++) 
+						for (int i = 0; i < (*it_i).n_operando; i++)
 						{
-							it++;	//pega proximo token 
-							symbol_value = procura_simbolo( it);
-							if ( symbol_value == -1 )
+							it++; //pega proximo token
+							symbol_value = procura_simbolo(it);
+							if (symbol_value == -1)
 							{
 								printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 								aux.push_back("ND");
@@ -1638,13 +1641,13 @@ void segunda_passagem(string file_in, string file_out)
 					}
 					else
 					{
-						for (int i = 0; i < (*it_i).n_operando ; i++) 
+						for (int i = 0; i < (*it_i).n_operando; i++)
 						{
-							it++;	//pega proximo token 
-							if (it != token_vector.end()) //copy com 1 argumento é o unico que entraria aqui 
+							it++;						  //pega proximo token
+							if (it != token_vector.end()) //copy com 1 argumento é o unico que entraria aqui
 							{
-								symbol_value = procura_simbolo( it);
-								if ( symbol_value == -1 )
+								symbol_value = procura_simbolo(it);
+								if (symbol_value == -1)
 								{
 									printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 									aux.push_back("ND");
@@ -1665,8 +1668,8 @@ void segunda_passagem(string file_in, string file_out)
 					for (int i = 0; i < (*it_i).n_operando; i++)
 					{
 						++it;
-						symbol_value = procura_simbolo( it);
-						if ( symbol_value == -1 )
+						symbol_value = procura_simbolo(it);
+						if (symbol_value == -1)
 						{
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 							aux.push_back("ND");

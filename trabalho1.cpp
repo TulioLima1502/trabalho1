@@ -228,10 +228,10 @@ int lerarquivo(std::string file_name, char *file_name2)
 	nome = file_name2;
 
 	nome = nome.substr(0, nome.size());
-	cout << "nome: " << nome << endl;
+	//cout << "nome: " << nome << endl;
 
 	saida = nome.substr(0, nome.size()) + ".pre";
-	cout << "saida: " << saida << endl;
+	//cout << "saida: " << saida << endl;
 	mcr = nome.substr(0, nome.size()) + ".mcr";
 	//cout << mcr << endl;
 	pontoo = nome.substr(0, nome.size()) + ".o";

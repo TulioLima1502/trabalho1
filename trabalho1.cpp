@@ -990,7 +990,7 @@ int verifica_argumento_macro(string saida, string argumento)
 
 void expande_macro(char *file_name)
 {
-	cout << "Começando a fazer o pre processamento do arquivo: ";
+	cout << "Começando a fazer a expansão de macro do arquivo: ";
 	string nome;
 	cout << file_name << ".pre" << endl;
 	nome = file_name;
@@ -1478,6 +1478,10 @@ void definir_label(string str, int n_address)
 
 void primeira_passagem(string file_in)
 {
+	cout << "Começando a fazer a primeira passagem no arquivo: ";
+	cout << file_in << endl;
+
+
 	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;
@@ -1552,8 +1556,8 @@ void primeira_passagem(string file_in)
 					if (it != token_vector.end())
 					{	//atualiza pc de acordo com o que foi especificado na linah do arquivo
 						pc = pc + stoi(*it);
-						cout << *it << endl;
-						cout << stoi(*it) << endl;
+						//cout << *it << endl;
+						//cout << stoi(*it) << endl;
 					}
 					else //soma so um mesmo
 						pc++;
@@ -1600,6 +1604,9 @@ int procura_simbolo(vector<string>::iterator it)
 
 void segunda_passagem(string file_in, string file_out)
 {
+	cout << "Começando a fazer a segunda passagem no arquivo: ";
+	cout << file_in << endl;
+
 	//*******PRIMEIRA PASSAGEM*******
 	std::ifstream infile(file_in);
 	std::string line;

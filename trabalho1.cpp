@@ -1613,7 +1613,51 @@ void segunda_passagem(string file_in, string file_out)
 			{
 				if (distance(it, it_end) != ((*it_i).n_operando + 1))
 				{
+					aux.push_back((*it_i).opcode);
 					printf("Erro! \n Número de operandos da instrução errado. \n Linha: %d \n", n_linha);
+					if ( distance(it,it_end) > ((*it_i).n_operando + 1) )
+					{
+						//tem mais operandos do que precisa
+
+						//Laço pegando proximos tokens i vezes, em que i é o # de operandos da instrução.
+						//STOP nem entra no laço (0 operandos)
+						//COPY entra no laço 2 vezes
+						//os demais entram no laço 1 vez.
+						for (int i = 0; i < (*it_i).n_operando ; i++) 
+						{
+							it++;	//pega proximo token 
+							symbol_value = procura_simbolo( it);
+							if ( symbol_value == -1 )
+							{
+								printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
+								aux.push_back("ND");
+							}
+							else
+								aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
+						}
+					}
+					else
+					{
+						for (int i = 0; i < (*it_i).n_operando ; i++) 
+						{
+							it++;	//pega proximo token 
+							if (it != token_vector.end()) //copy com 1 argumento é o unico que entraria aqui 
+							{
+								symbol_value = procura_simbolo( it);
+								if ( symbol_value == -1 )
+								{
+									printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
+									aux.push_back("ND");
+								}
+								else
+									aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
+							}
+							else
+							{
+								aux.push_back("FA");
+							}
+						}
+					}
 				}
 				else
 				{
@@ -1621,9 +1665,17 @@ void segunda_passagem(string file_in, string file_out)
 					for (int i = 0; i < (*it_i).n_operando; i++)
 					{
 						++it;
+<<<<<<< HEAD
 						symbol_value = procura_simbolo(it);
 						if (symbol_value == -1)
+=======
+						symbol_value = procura_simbolo( it);
+						if ( symbol_value == -1 )
+						{
+>>>>>>> e5789658db9fcf44dc55f479358a1baf63005ce0
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
+							aux.push_back("ND");
+						}
 						else
 							aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 					}
@@ -1685,7 +1737,14 @@ void segunda_passagem(string file_in, string file_out)
 		//TODO retirar linha abaixo depois
 		ofile << endl;
 
+<<<<<<< HEAD
 		++n_linha;
+=======
+    	for (const auto &e : aux)
+    		cout << e << " ";
+
+		++ n_linha;
+>>>>>>> e5789658db9fcf44dc55f479358a1baf63005ce0
 		token_vector.clear();
 		aux.clear();
 	}

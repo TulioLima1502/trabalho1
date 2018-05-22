@@ -1280,7 +1280,7 @@ void pre_procesamento(char *file_name, int lineachousection)
 	//cout << nome;
 
 	string line, nomedamacro, nomeparam, valorparam, nomeequ, valorequ;
-	int fim, posequ, fimequ, remover, teste, erroequ = 0;
+	int fim, posequ, fimequ, remover, teste, erroequ = 0, marcador=0;
 	ifstream meufile("auxiliar");
 	ofstream equfile("EQU", ios::app);
 	ofstream saidafile(nome.append(".pre"), ios::app);
@@ -1290,9 +1290,17 @@ void pre_procesamento(char *file_name, int lineachousection)
 		int linecounter = 0;
 		while (getline(meufile, line))
 		{
+
+			if (line.find("SECTION TEXT") != line.npos){
+				marcador=1;
+			}
+
 			linecounter++;
 			if (line.find("EQU") != line.npos)
 			{
+				if(marcador==1){
+					cout << "ERRO, EQU está definida dentro da SECTION TEXT" << endl;
+				}
 				//cout << "\nTem um EQU aqui\n";
 				fim = line.size();
 

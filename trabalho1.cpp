@@ -316,10 +316,10 @@ int lerarquivo(std::string file_name, char *file_name2)
 	{
 		cout << "ERRO, FALTOU A SECTION TEXT" << endl;
 	}
-	if (achoudata == 0)
-	{
-		cout << "ERRO, FALTOU A SECTION DATA" << endl;
-	}
+	//if (achoudata == 0)
+	//{
+//		cout << "ERRO, FALTOU A SECTION DATA" << endl;
+//	}
 	if (errosection == 1)
 	{
 		cout << "ERRO na difinição do Section" << endl;

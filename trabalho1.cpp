@@ -1816,13 +1816,20 @@ int main(int argc, char *argv[])
 	//argv eh um vetor com os argumentos. argv[0] sempre sera o path do programa,
 	//entao eh basicamente ignorado. por isso, o argc na verdade vai ser o numero
 	//de argumentos mais um.
+	if (argc != 4)
+	{
+		cout << "\nERRO.\nNúmero de argumentos inválidos! " << endl;
+		return 0;
+	}
+
+
 	string file_name;
 
 	file_name = argv[2]; // passar para learquivo(). eh o nome do arquivo .asm.
 	string file_in = file_name + ".asm";
 	if (!file_exist(file_in))
 	{
-		cout << "\nArquivo não existe nessa pasta!!!\n\n";
+		cout << "\nERRO.\nArquivo não existe nessa pasta!\n\n";
 		return 0;
 	}
 
@@ -1831,8 +1838,7 @@ int main(int argc, char *argv[])
 
 	if (string(argv[1]) == "-p")
 	{
-		cout << endl
-			 << "Iniciando o -p" << endl;
+
 		pre_procesamento(argv[3], lineachousection);
 	}
 	else if (string(argv[1]) == "-m")
@@ -1861,7 +1867,7 @@ int main(int argc, char *argv[])
 
 	else
 	{
-		cout << " Comando de execução não encontrado.    ERRO     " << endl;
+		cout << "\nERRO.\nComando de execução inválido." << endl;
 	}
 
 	return 0;

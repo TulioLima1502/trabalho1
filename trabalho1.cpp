@@ -1665,14 +1665,9 @@ void segunda_passagem(string file_in, string file_out)
 					for (int i = 0; i < (*it_i).n_operando; i++)
 					{
 						++it;
-<<<<<<< HEAD
-						symbol_value = procura_simbolo(it);
-						if (symbol_value == -1)
-=======
 						symbol_value = procura_simbolo( it);
 						if ( symbol_value == -1 )
 						{
->>>>>>> e5789658db9fcf44dc55f479358a1baf63005ce0
 							printf("Erro! \n Símbolo não declarado. \n Linha: %d \n", n_linha);
 							aux.push_back("ND");
 						}
@@ -1737,14 +1732,7 @@ void segunda_passagem(string file_in, string file_out)
 		//TODO retirar linha abaixo depois
 		ofile << endl;
 
-<<<<<<< HEAD
 		++n_linha;
-=======
-    	for (const auto &e : aux)
-    		cout << e << " ";
-
-		++ n_linha;
->>>>>>> e5789658db9fcf44dc55f479358a1baf63005ce0
 		token_vector.clear();
 		aux.clear();
 	}

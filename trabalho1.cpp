@@ -1,12 +1,30 @@
-//Codigo em C++ do trabalho de Software Basico
+//Codigo em C++ do Primeiro Trabalho de Software Basico
 
 // Desenvolvedores: Túlio Mariano da Silva Lima e Débora Ferreira dos Santos
 
 // Descrição do trabalho 1
-// Objetivos:
-// Funcoes:
+// Objetivos: Fazer um programa que personifique o um montador fazendo uso de uma ou duas passagens
+// além de realizar a expansão de macros e um pre-processamento
 
-// Como compilar
+// Funcoes: Pre-processamento de arquivos .asm e retorna um arquivo .pre
+// Expansão de macros de arquivos .asm e retorna um arquivo .mcr
+// Montagem conforme o algoritmo de duas passagens e retorna um arquivo .o
+// O CÓDIGO DA DUPLA ENCONTRA-SE DISPONÍVEL NO GITHUB, NO SEGUINTE REPOSITÓRIO:
+//
+// 		https://github.com/TulioLima1502/trabalho1
+//
+// PARA A CONFECÇÃO DO TRABALHO 1 FOI UTILIZADO O VISUAL STUDIO CODE (	diferente do visual studio community, mas igualmente gratuito)
+//
+// INSTRUÇÕES DE USO/COMPILAÇÃO
+// É NECESSÁRIO DE UM COMPUTADOR COM LINUX (UBUNTU 16 e 18)
+// É NECESSAŔIO TER OS PACOTES DE C++ PARA REALIZAR A COMPILAÇÃO E EXECUÇÃO PELA LINHA DE COMANDO
+// É NECESSÁRIO REALIZAR A COMPILAÇÃO PARA SÓ EM SEGUIDA EXECUTAR
+// O COMANDO DE COMPILAÇÃO É: g++ -std=c++11 trabalho1.cpp -o <nome do executável>
+// DEPOIS DE COMPILADO BASTA EXECUTAR O PROGRAMA COM O COMANDO: 
+//
+//				./<nome do executável> -x <nome do arquivo>.asm <nome do arquivo de saida>
+// 
+// ** PARA CORRETO FUNCIONAMENTO É NECESSAŔIO TER UM ARQUIVO TEXTO COM EXTENSÃO .ASM NA MESMA PASTA DO PROGRAMA TRABALHO1.CPP
 
 #include <iostream>
 #include <istream>

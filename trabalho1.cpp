@@ -45,6 +45,11 @@ typedef struct tabela_diretiva
 	int n_operando;
 } tabela_diretiva;
 
+typedef struct auxiliar_data
+{
+	int data;
+	int data_pc;
+} auxiliar_data;
 //DEFINIÇÃO DAS TABELAS
 vector<tabela_simbolo> tabela_simbolo_vector;
 
@@ -53,8 +58,7 @@ vector<tabela_instrucao> tabela_instrucao_vector;
 vector<tabela_diretiva> tabela_diretiva_vector;
 
 //VARIÁVEL GLOBAL AUXILIAR
-int data = -1;
-int data_pc = -1;
+
 
 //INICIALIZAÇÃO DAS TABELAS
 //*****TABELA DE INSTRUÇÕES
@@ -991,37 +995,38 @@ int verifica_argumento_macro(string saida, string argumento)
 	return numero;
 }
 
-void verifica_salto_linha(string nome_do_arquivo){
+void verifica_salto_linha(string nome_do_arquivo)
+{
 
-string linha_enter,linha_aux;
-string salto_um = ":\0", salto_dois=": \0";
+	string linha_enter,linha_aux;
+	string salto_um = ":\0", salto_dois=": \0";
 
-nome_do_arquivo = nome_do_arquivo.append(".pre");
-//cout << nome_do_arquivo << endl;
-ifstream narq(nome_do_arquivo, ios::app);
+	nome_do_arquivo = nome_do_arquivo.append(".pre");
+	//cout << nome_do_arquivo << endl;
+	ifstream narq(nome_do_arquivo, ios::app);
 
-while(getline(narq,linha_enter)){
-	//cout << linha_enter << endl;
-	linha_aux=linha_enter;
-	size_t posicao=linha_enter.find(":");
-	if(posicao!=linha_enter.npos){
-		//cout << "Entrou aqui" << endl;
-		//cout << linha_enter.substr(linha_enter.find(":"),linha_enter.size()) << endl;
-		linha_enter=linha_enter.substr(linha_enter.find(":"),linha_enter.size());
+	while(getline(narq,linha_enter)){
+		//cout << linha_enter << endl;
+		linha_aux=linha_enter;
+		size_t posicao=linha_enter.find(":");
+		if(posicao!=linha_enter.npos){
+			//cout << "Entrou aqui" << endl;
+			//cout << linha_enter.substr(linha_enter.find(":"),linha_enter.size()) << endl;
+			linha_enter=linha_enter.substr(linha_enter.find(":"),linha_enter.size());
 
-		//size_t posicao_fim = linha_enter.find(":\n");
-		//size_t posicao_fimdois = linha_enter.find(": \n");
-		if(linha_enter==salto_um){
-			cout << "Achou o problema" << endl;
-			getline(narq,linha_enter);
-			cout << linha_aux << " " << linha_enter << endl;
+			//size_t posicao_fim = linha_enter.find(":\n");
+			//size_t posicao_fimdois = linha_enter.find(": \n");
+			if(linha_enter==salto_um){
+				cout << "Achou o problema" << endl;
+				getline(narq,linha_enter);
+				cout << linha_aux << " " << linha_enter << endl;
+			}
+			if(linha_enter==salto_dois){
+				cout << "Achou o problema 2" << endl;
+			}
 		}
-		if(linha_enter==salto_dois){
-			cout << "Achou o problema 2" << endl;
-		}
+
 	}
-
-}
 
 }
 
@@ -1551,7 +1556,7 @@ void definir_label(string str, int n_address)
 	tabela_simbolo_vector.push_back(temp);
 }
 
-void primeira_passagem(string file_in)
+auxiliar_data primeira_passagem(string file_in)
 {
 	cout << "Começando a fazer a primeira passagem no arquivo: ";
 	cout << file_in << endl;
@@ -1560,6 +1565,8 @@ void primeira_passagem(string file_in)
 	std::ifstream infile(file_in);
 	std::string line;
 	string str;
+
+	auxiliar_data non_global;
 
 	int n_linha = 1; //número da linha do programa
 	int pc = 0;		 //número do endereço equivalente
@@ -1667,8 +1674,8 @@ void primeira_passagem(string file_in)
 						if (it != token_vector.end())
 						{
 							if (!str.compare("DATA"))
-								data = n_linha;
-								data_pc = pc;
+								non_global.data = n_linha;
+								non_global.data_pc = pc;
 						}
 					}
 					else
@@ -1681,6 +1688,7 @@ void primeira_passagem(string file_in)
 		}
 		++n_linha;
 	}
+	return non_global;
 }
 
 int procura_simbolo(vector<string>::iterator it)
@@ -1734,7 +1742,7 @@ int procura_simbolo_valor_const(vector<string>::iterator it)
 }
 
 
-void segunda_passagem(string file_in, string file_out)
+void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 {
 	cout << "Começando a fazer a segunda passagem no arquivo: ";
 	cout << file_in << endl;
@@ -1782,7 +1790,7 @@ void segunda_passagem(string file_in, string file_out)
 				if ( (!str.compare("JMP")) || (!str.compare("JMPZ")) || (!str.compare("JMPP")) || (!str.compare("JMPN")))
 				{
 					it++;
-					if ( (data_pc > - 1) && ( procura_simbolo(it) >= data_pc) )
+					if ( (non_global.data_pc > - 1) && ( procura_simbolo(it) >= non_global.data_pc) )
 					{
 						printf("Erro! \n Pulo para sessão inválida. \n Linha: %d \n", n_linha);
 					}
@@ -1828,7 +1836,7 @@ void segunda_passagem(string file_in, string file_out)
 							}
 							else
 							{
-								if ((n_linha <= data) || (data == -1))
+								if ((n_linha <= non_global.data) || (non_global.data == -1))
 									aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 								else
 									printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
@@ -1850,7 +1858,7 @@ void segunda_passagem(string file_in, string file_out)
 								}
 								else
 								{
-									if ((n_linha <= data) || (data == -1))
+									if ((n_linha <= non_global.data) || (non_global.data == -1))
 										aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 									else
 										printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
@@ -1877,7 +1885,7 @@ void segunda_passagem(string file_in, string file_out)
 						}
 						else
 						{
-							if ((n_linha <= data) || (data == -1))
+							if ((n_linha <= non_global.data) || (non_global.data == -1))
 								aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 							else
 								printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
@@ -1892,7 +1900,7 @@ void segunda_passagem(string file_in, string file_out)
 		{
 			if (!str.compare("CONST"))
 			{
-				if ((n_linha >= data) && (data != -1))
+				if ((n_linha >= non_global.data) && (non_global.data != -1))
 				{
 					if (distance(it, it_end) != 2)
 					{
@@ -1921,7 +1929,7 @@ void segunda_passagem(string file_in, string file_out)
 			{
 				if (!str.compare("SPACE"))
 				{
-					if ((n_linha >= data) && (data != -1))
+					if ((n_linha >= non_global.data) && (non_global.data != -1))
 					{
 						++it;
 						if (it != token_vector.end()) //verifica se tem algum operando na diretiva space
@@ -1962,8 +1970,8 @@ void montagem(string filein, string fileout)
 {
 	inicia_tabela_diretiva();
 	inicia_tabela_instrucao();
-	primeira_passagem(filein);
-	segunda_passagem(filein, fileout);
+	auxiliar_data non_global = primeira_passagem(filein);
+	segunda_passagem(filein, fileout, non_global);
 }
 
 int main(int argc, char *argv[])

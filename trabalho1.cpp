@@ -2,12 +2,14 @@
 
 // Desenvolvedores: Túlio Mariano da Silva Lima (12/0054337) e Débora Ferreira dos Santos (13/0044075)
 
+
 // Descrição do trabalho 1
 // Macro-Assembler da linguagem assembly hipotética 
 
 // *	COMPILAÇÃO
 // *	Linha de comando: $ g++ -std=c++11 trabalho1.cpp -o nome_exe
 
+//
 // *	EXECUÇÃO
 // *	Linha de comando:	$ ./nome_exe -p nome_arquivo_asm nome_arquivo_saida
 // *						$ ./nome_exe -m nome_arquivo_asm nome_arquivo_saida

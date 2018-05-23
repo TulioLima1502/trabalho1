@@ -29,6 +29,7 @@ typedef struct tabela_simbolo
 	string simbolo;
 	int valor;
 	int is_const;
+	int valor_const;
 } tabela_simbolo;
 
 typedef struct tabela_instrucao
@@ -1510,6 +1511,7 @@ void definir_label(string str, int n_address)
 	temp.simbolo = str;
 	temp.valor = n_address;
 	temp.is_const = 0;
+	temp.valor_const = -1;
 	tabela_simbolo_vector.push_back(temp);
 }
 
@@ -1579,6 +1581,9 @@ void primeira_passagem(string file_in)
 					if (!str.compare((*it_s).simbolo)) 
 					{
 						(*it_s).is_const = 1;
+						it++; it++;
+						(*it_s).valor_const = stoi(*it);
+						it--;it--;
 						break;
 					}
 				}	
@@ -1674,6 +1679,22 @@ int procura_simbolo_const(vector<string>::iterator it)
 	else
 		return -1;
 }
+int procura_simbolo_valor_const(vector<string>::iterator it)
+{ //ße existir um tabela de simbolos, percorre ela toda procurando pelo simbolo. retorna -1 caso nao encontre na tabela
+	if (tabela_simbolo_vector.size())
+	{
+		for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			if (!(*it).compare((*it_s).simbolo))
+			{
+				return (*it_s).valor_const;
+			}
+		}
+		return -1;
+	}
+	else
+		return -1;
+}
 
 
 void segunda_passagem(string file_in, string file_out)
@@ -1726,6 +1747,16 @@ void segunda_passagem(string file_in, string file_out)
 					it++;
 					if ( procura_simbolo_const(it) )
 						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
+					it--;
+				}
+				if (!str.compare("DIV"))
+				{
+					it++;
+					if ( procura_simbolo_const(it) )
+					{	
+						if (procura_simbolo_valor_const(it) == 0 )
+							printf("Erro! \n Divisão por constante igual a 0. \n Linha: %d \n", n_linha);
+					}
 					it--;
 				}
 				if (distance(it, it_end) != ((*it_i).n_operando + 1))

@@ -990,8 +990,43 @@ int verifica_argumento_macro(string saida, string argumento)
 	return numero;
 }
 
+void verifica_salto_linha(string nome_do_arquivo){
+
+string linha_enter,linha_aux;
+string salto_um = ":\0", salto_dois=": \0";
+
+nome_do_arquivo = nome_do_arquivo.append(".pre");
+//cout << nome_do_arquivo << endl;
+ifstream narq(nome_do_arquivo, ios::app);
+
+while(getline(narq,linha_enter)){
+	//cout << linha_enter << endl;
+	linha_aux=linha_enter;
+	size_t posicao=linha_enter.find(":");
+	if(posicao!=linha_enter.npos){
+		//cout << "Entrou aqui" << endl;
+		//cout << linha_enter.substr(linha_enter.find(":"),linha_enter.size()) << endl;
+		linha_enter=linha_enter.substr(linha_enter.find(":"),linha_enter.size());
+
+		//size_t posicao_fim = linha_enter.find(":\n");
+		//size_t posicao_fimdois = linha_enter.find(": \n");
+		if(linha_enter==salto_um){
+			cout << "Achou o problema" << endl;
+			getline(narq,linha_enter);
+			cout << linha_aux << " " << linha_enter << endl;
+		}
+		if(linha_enter==salto_dois){
+			cout << "Achou o problema 2" << endl;
+		}
+	}
+
+}
+
+}
+
 void expande_macro(char *file_name)
 {
+	verifica_salto_linha(file_name);
 	cout << "Começando a fazer a expansão de macro do arquivo: ";
 	string nome;
 	cout << file_name << ".pre" << endl;

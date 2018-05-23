@@ -1185,7 +1185,7 @@ void expande_macro(char *file_name)
 								{
 									if (line[ia] == ' ')
 									{
-										la = la + 1;
+										la = la + 1; 
 									}
 								}
 
@@ -1947,11 +1947,11 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 						if (it != token_vector.end()) //verifica se tem algum operando na diretiva space
 						{
 							for (int i = 0; i < stoi(*it); i++) //loop reservando espaço até alcançar o valor do argumento
-								aux.push_back("X");
+								aux.push_back("XX");
 						}
 						else
 						{
-							aux.push_back("X");
+							aux.push_back("XX");
 						}
 					}
 					else
@@ -2044,6 +2044,5 @@ int main(int argc, char *argv[])
 	{
 		cout << "\nERRO.\nComando de execução inválido." << endl;
 	}
-
 	return 0;
-}
+} 

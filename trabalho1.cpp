@@ -54,6 +54,7 @@ vector<tabela_diretiva> tabela_diretiva_vector;
 
 //VARIÁVEL GLOBAL AUXILIAR
 int data = -1;
+int data_pc = -1;
 
 //INICIALIZAÇÃO DAS TABELAS
 //*****TABELA DE INSTRUÇÕES
@@ -1632,6 +1633,7 @@ void primeira_passagem(string file_in)
 						{
 							if (!str.compare("DATA"))
 								data = n_linha;
+								data_pc = pc;
 						}
 					}
 					else
@@ -1742,6 +1744,15 @@ void segunda_passagem(string file_in, string file_out)
 		{
 			if (!str.compare((*it_i).mnemonico))
 			{
+				if ( (!str.compare("JMP")) || (!str.compare("JMPZ")) || (!str.compare("JMPP")) || (!str.compare("JMPN")))
+				{
+					it++;
+					if ( (data_pc > - 1) && ( procura_simbolo(it) >= data_pc) )
+					{
+						printf("Erro! \n Pulo para sessão inválida. \n Linha: %d \n", n_linha);
+					}
+					it--;
+				}
 				if ( (!str.compare("STORE")) || (!str.compare("INPUT")) )
 				{
 					it++;

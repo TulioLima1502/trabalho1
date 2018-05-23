@@ -1007,6 +1007,9 @@ void expande_macro(char *file_name)
 	ofstream menosm(nome.append(".mcr"), ios::app);
 
 	string termina = "ENDMACRO";
+	string SECTIONTEXT = "SECTION TEXT";
+	string SECTIONDATA = "SECTION DATA";
+	int marca_section = 0, marca_sectiondata = 0;
 
 	int linhamdt = 0, tam, contador = 0, compara = 0, linhafim, inicio_argumentos = 0, num_argumentos = 0;
 
@@ -1016,10 +1019,21 @@ void expande_macro(char *file_name)
 		//cout << "ta aqui?" << endl;
 		while (getline(meufile, line))
 		{
-
+			if(strstr(line.c_str(), SECTIONTEXT.c_str())){
+				marca_section=1;
+			}
+			if(strstr(line.c_str(), SECTIONDATA.c_str())){
+				marca_sectiondata=1;
+			}
 			size_t poscom = line.find("MACRO");
 			if (poscom != line.npos)
 			{
+				if(marca_section!=1){
+					cout << "MACRO definida fora da secção text" << endl;
+				}
+				if(marca_sectiondata==1){
+					cout << "MACRO definida dentro da secção data" << endl;
+				}
 				//cout << "\nTem uma MACRO aqui \n\n";
 				//salva aqui o nome das MACROS definidas no código
 				//Chama uma rotina para salvar em um arquivo o nome da macro, a quantidade de parametros e a linha que será adicionada na MDT

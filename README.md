@@ -1,7 +1,7 @@
 # Montador Macro-Assembly 
 ## Descrição
 Primeiro trabalho prático da disciplina de Software Básico 1/2018.
-Tradutor Macro-Assembler de duas passagens da linguagem assebly hipotética implementado em C++ pela dupla Débora Ferreira e Túlio Lima
+Tradutor Macro-Assembler de duas passagens da linguagem assebly hipotética implementado em C++ pela dupla Débora Ferreira dos Santos - 13/0044075 e Túlio Mariano da Silva Lima - 12/0054337
 
 ## Instruções
 #### Compilação

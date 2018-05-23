@@ -1,19 +1,12 @@
 //Codigo em C++ do trabalho de Software Basico
 
-// Desenvolvedores: Túlio Mariano da Silva Lima (12/0054337) e Débora Ferreira dos Santos (13/0044075)
-
+// Desenvolvedores: Túlio Mariano da Silva Lima e Débora Ferreira dos Santos
 
 // Descrição do trabalho 1
-// Macro-Assembler da linguagem assembly hipotética 
+// Objetivos:
+// Funcoes:
 
-// *	COMPILAÇÃO
-// *	Linha de comando: $ g++ -std=c++11 trabalho1.cpp -o nome_exe
-
-//
-// *	EXECUÇÃO
-// *	Linha de comando:	$ ./nome_exe -p nome_arquivo_asm nome_arquivo_saida
-// *						$ ./nome_exe -m nome_arquivo_asm nome_arquivo_saida
-// *						$ ./nome_exe -o nome_arquivo_asm nome_arquivo_saida
+// Como compilar
 
 #include <iostream>
 #include <istream>
@@ -52,11 +45,6 @@ typedef struct tabela_diretiva
 	int n_operando;
 } tabela_diretiva;
 
-typedef struct auxiliar_data
-{
-	int data;
-	int data_pc;
-} auxiliar_data;
 //DEFINIÇÃO DAS TABELAS
 vector<tabela_simbolo> tabela_simbolo_vector;
 
@@ -65,7 +53,8 @@ vector<tabela_instrucao> tabela_instrucao_vector;
 vector<tabela_diretiva> tabela_diretiva_vector;
 
 //VARIÁVEL GLOBAL AUXILIAR
-
+int data = -1;
+int data_pc = -1;
 
 //INICIALIZAÇÃO DAS TABELAS
 //*****TABELA DE INSTRUÇÕES
@@ -1002,44 +991,9 @@ int verifica_argumento_macro(string saida, string argumento)
 	return numero;
 }
 
-void verifica_salto_linha(string nome_do_arquivo)
-{
-
-	string linha_enter,linha_aux;
-	string salto_um = ":\0", salto_dois=": \0";
-
-	nome_do_arquivo = nome_do_arquivo.append(".pre");
-	//cout << nome_do_arquivo << endl;
-	ifstream narq(nome_do_arquivo, ios::app);
-
-	while(getline(narq,linha_enter)){
-		//cout << linha_enter << endl;
-		linha_aux=linha_enter;
-		size_t posicao=linha_enter.find(":");
-		if(posicao!=linha_enter.npos){
-			//cout << "Entrou aqui" << endl;
-			//cout << linha_enter.substr(linha_enter.find(":"),linha_enter.size()) << endl;
-			linha_enter=linha_enter.substr(linha_enter.find(":"),linha_enter.size());
-
-			//size_t posicao_fim = linha_enter.find(":\n");
-			//size_t posicao_fimdois = linha_enter.find(": \n");
-			if(linha_enter==salto_um){
-				cout << "Achou o problema" << endl;
-				getline(narq,linha_enter);
-				cout << linha_aux << " " << linha_enter << endl;
-			}
-			if(linha_enter==salto_dois){
-				cout << "Achou o problema 2" << endl;
-			}
-		}
-
-	}
-
-}
-
 void expande_macro(char *file_name)
 {
-	verifica_salto_linha(file_name);
+	string salto_um = ":\0", salto_dois = ": \0";
 	cout << "Começando a fazer a expansão de macro do arquivo: ";
 	string nome;
 	cout << file_name << ".pre" << endl;
@@ -1047,7 +1001,7 @@ void expande_macro(char *file_name)
 	nome = nome.substr(0, nome.size());
 	//cout << nome;
 
-	string line, nomedamacro, nomeparam, valorparam, nomeequ, valorequ, token, mntbusca, mdtbusca, mdtline, linhabusca, comparando, linhafimacro, argumentos, auxiliar, quantidade_de_argumentos;
+	string line, linha_aux, linha_auxdois, nomedamacro, nomeparam, valorparam, nomeequ, valorequ, token, mntbusca, mdtbusca, mdtline, linhabusca, comparando, linhafimacro, argumentos, auxiliar, quantidade_de_argumentos;
 
 	string saida = nome.substr(0, nome.size()) + ".pre";
 
@@ -1069,19 +1023,44 @@ void expande_macro(char *file_name)
 		//cout << "ta aqui?" << endl;
 		while (getline(meufile, line))
 		{
-			if(strstr(line.c_str(), SECTIONTEXT.c_str())){
-				marca_section=1;
+			size_t posicao = line.find(":");
+			if (posicao != line.npos)
+			{
+				linha_auxdois = line;
+				linha_aux = line;
+				linha_aux = linha_aux.substr(linha_aux.find(":"), linha_aux.size());
+
+				if (linha_aux == salto_um)
+				{
+					cout << "Achou o problema" << endl;
+					getline(meufile, line);
+					cout << linha_aux << " " << line << endl;
+					line = linha_auxdois + " " + line;
+				}else if (linha_aux == salto_dois)
+				{
+					cout << "Achou o problema 2" << endl;
+					getline(meufile, line);
+					cout << linha_aux << " " << line << endl;
+					line = linha_aux + " " + line;
+				}
 			}
-			if(strstr(line.c_str(), SECTIONDATA.c_str())){
-				marca_sectiondata=1;
+			if (strstr(line.c_str(), SECTIONTEXT.c_str()))
+			{
+				marca_section = 1;
+			}
+			if (strstr(line.c_str(), SECTIONDATA.c_str()))
+			{
+				marca_sectiondata = 1;
 			}
 			size_t poscom = line.find("MACRO");
 			if (poscom != line.npos)
 			{
-				if(marca_section!=1){
+				if (marca_section != 1)
+				{
 					cout << "MACRO definida fora da secção text" << endl;
 				}
-				if(marca_sectiondata==1){
+				if (marca_sectiondata == 1)
+				{
 					cout << "MACRO definida dentro da secção data" << endl;
 				}
 				//cout << "\nTem uma MACRO aqui \n\n";
@@ -1187,7 +1166,7 @@ void expande_macro(char *file_name)
 								{
 									if (line[ia] == ' ')
 									{
-										la = la + 1; 
+										la = la + 1;
 									}
 								}
 
@@ -1289,11 +1268,11 @@ void expande_macro(char *file_name)
 						//cout << token << endl;
 						//if (token == "STOP")
 						//{ // esse if eh so pra colocar o STOP no .mcr. sem isso o stop nao entra.
-							//cout << "entrou aqui!" << endl;
-							//if (menosm.is_open())
-							//{
+						//cout << "entrou aqui!" << endl;
+						//if (menosm.is_open())
+						//{
 						//	menosm << token << endl;
-							//}
+						//}
 						//}
 						mdtfile.close();
 						mntfile.close();
@@ -1326,7 +1305,7 @@ void expande_macro(char *file_name)
 			}
 			cout << line << endl;
 			if (line == "STOP")
-			{   // esse if eh so pra colocar o STOP no .mcr. sem isso o stop nao entra.
+			{ // esse if eh so pra colocar o STOP no .mcr. sem isso o stop nao entra.
 				//cout << "entrou aqui!" << endl;
 				//if (menosm.is_open())
 				//{
@@ -1341,7 +1320,6 @@ void expande_macro(char *file_name)
 
 				//}
 			}
-			
 		}
 		//menosm.close();
 	}
@@ -1563,7 +1541,7 @@ void definir_label(string str, int n_address)
 	tabela_simbolo_vector.push_back(temp);
 }
 
-auxiliar_data primeira_passagem(string file_in)
+void primeira_passagem(string file_in)
 {
 	cout << "Começando a fazer a primeira passagem no arquivo: ";
 	cout << file_in << endl;
@@ -1572,8 +1550,6 @@ auxiliar_data primeira_passagem(string file_in)
 	std::ifstream infile(file_in);
 	std::string line;
 	string str;
-
-	auxiliar_data non_global;
 
 	int n_linha = 1; //número da linha do programa
 	int pc = 0;		 //número do endereço equivalente
@@ -1620,25 +1596,27 @@ auxiliar_data primeira_passagem(string file_in)
 				++it;					 //pega o proximo token da linha do arquivo
 			str = *it;
 
-			if (! str.compare("CONST") )
+			if (!str.compare("CONST"))
 			{
 				it--;
 				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
 				{
-					
-					str=*it;
+
+					str = *it;
 					str.erase(std::prev(str.end()));
-					if (!str.compare((*it_s).simbolo)) 
+					if (!str.compare((*it_s).simbolo))
 					{
 						(*it_s).is_const = 1;
-						it++; it++;
+						it++;
+						it++;
 						(*it_s).valor_const = stoi(*it);
-						it--;it--;
+						it--;
+						it--;
 						break;
 					}
-				}	
-				it++;	
-				str	= *it;	
+				}
+				it++;
+				str = *it;
 			}
 		}
 		//VERIFICA SE É INSTRUÇÃO
@@ -1681,21 +1659,20 @@ auxiliar_data primeira_passagem(string file_in)
 						if (it != token_vector.end())
 						{
 							if (!str.compare("DATA"))
-								non_global.data = n_linha;
-								non_global.data_pc = pc;
+								data = n_linha;
+							data_pc = pc;
 						}
 					}
 					else
 					{
 						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
-						cout << "String: " << str <<"\n\n\n";
+						cout << "String: " << str << "\n\n\n";
 					}
 				}
 			}
 		}
 		++n_linha;
 	}
-	return non_global;
 }
 
 int procura_simbolo(vector<string>::iterator it)
@@ -1748,8 +1725,7 @@ int procura_simbolo_valor_const(vector<string>::iterator it)
 		return -1;
 }
 
-
-void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
+void segunda_passagem(string file_in, string file_out)
 {
 	cout << "Começando a fazer a segunda passagem no arquivo: ";
 	cout << file_in << endl;
@@ -1794,35 +1770,28 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 		{
 			if (!str.compare((*it_i).mnemonico))
 			{
-				if ( (!str.compare("JMP")) || (!str.compare("JMPZ")) || (!str.compare("JMPP")) || (!str.compare("JMPN")))
+				if ((!str.compare("JMP")) || (!str.compare("JMPZ")) || (!str.compare("JMPP")) || (!str.compare("JMPN")))
 				{
 					it++;
-					if ( (non_global.data_pc > - 1) && ( procura_simbolo(it) >= non_global.data_pc) )
+					if ((data_pc > -1) && (procura_simbolo(it) >= data_pc))
 					{
 						printf("Erro! \n Pulo para sessão inválida. \n Linha: %d \n", n_linha);
 					}
 					it--;
 				}
-				if ( (!str.compare("STORE")) || (!str.compare("INPUT")) )
+				if ((!str.compare("STORE")) || (!str.compare("INPUT")))
 				{
 					it++;
-					if ( procura_simbolo_const(it) )
+					if (procura_simbolo_const(it))
 						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
 					it--;
-				}
-				if (!str.compare("COPY"))
-				{
-					it++; it++;
-					if ( procura_simbolo_const(it) )
-						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
-					it--; it--;
 				}
 				if (!str.compare("DIV"))
 				{
 					it++;
-					if ( procura_simbolo_const(it) )
-					{	
-						if (procura_simbolo_valor_const(it) == 0 )
+					if (procura_simbolo_const(it))
+					{
+						if (procura_simbolo_valor_const(it) == 0)
 							printf("Erro! \n Divisão por constante igual a 0. \n Linha: %d \n", n_linha);
 					}
 					it--;
@@ -1850,10 +1819,10 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 							}
 							else
 							{
-								if ((n_linha <= non_global.data) || (non_global.data == -1))
+								if ((n_linha <= data) || (data == -1))
 									aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 								else
-									printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+									printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 							}
 						}
 					}
@@ -1872,10 +1841,10 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 								}
 								else
 								{
-									if ((n_linha <= non_global.data) || (non_global.data == -1))
+									if ((n_linha <= data) || (data == -1))
 										aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 									else
-										printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+										printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 								}
 							}
 							else
@@ -1899,10 +1868,10 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 						}
 						else
 						{
-							if ((n_linha <= non_global.data) || (non_global.data == -1))
+							if ((n_linha <= data) || (data == -1))
 								aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 							else
-								printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+								printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 						}
 					}
 				}
@@ -1914,7 +1883,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 		{
 			if (!str.compare("CONST"))
 			{
-				if ((n_linha >= non_global.data) && (non_global.data != -1))
+				if ((n_linha >= data) && (data != -1))
 				{
 					if (distance(it, it_end) != 2)
 					{
@@ -1937,27 +1906,27 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 					}
 				}
 				else
-					printf("Erro Semântico! \n Diretiva CONST na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+					printf("Erro Sintático! \n Diretiva CONST na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 			}
 			else
 			{
 				if (!str.compare("SPACE"))
 				{
-					if ((n_linha >= non_global.data) && (non_global.data != -1))
+					if ((n_linha >= data) && (data != -1))
 					{
 						++it;
 						if (it != token_vector.end()) //verifica se tem algum operando na diretiva space
 						{
 							for (int i = 0; i < stoi(*it); i++) //loop reservando espaço até alcançar o valor do argumento
-								aux.push_back("0");
+								aux.push_back("X");
 						}
 						else
 						{
-							aux.push_back("0");
+							aux.push_back("X");
 						}
 					}
 					else
-						printf("Erro Semântico! \n Diretiva SPACE na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+						printf("Erro Sintático! \n Diretiva SPACE na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 				}
 				else
 				{
@@ -1971,7 +1940,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 		for (const auto &e : aux)
 			ofile << e << " ";
 		//TODO retirar linha abaixo depois
-		//ofile << endl;
+		ofile << endl;
 
 		++n_linha;
 		token_vector.clear();
@@ -1984,8 +1953,8 @@ void montagem(string filein, string fileout)
 {
 	inicia_tabela_diretiva();
 	inicia_tabela_instrucao();
-	auxiliar_data non_global = primeira_passagem(filein);
-	segunda_passagem(filein, fileout, non_global);
+	primeira_passagem(filein);
+	segunda_passagem(filein, fileout);
 }
 
 int main(int argc, char *argv[])
@@ -2037,7 +2006,7 @@ int main(int argc, char *argv[])
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
 		file_in = file_ + ".mcr";
-		string file_out = file_ + ".o"; //todo trocar pra '.o'
+		string file_out = file_ + ".txt"; //todo trocar pra '.o'
 		montagem(file_in, file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}
@@ -2046,5 +2015,6 @@ int main(int argc, char *argv[])
 	{
 		cout << "\nERRO.\nComando de execução inválido." << endl;
 	}
+
 	return 0;
-} 
+}

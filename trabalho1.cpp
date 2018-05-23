@@ -1803,6 +1803,13 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
 					it--;
 				}
+				if (!str.compare("COPY"))
+				{
+					it++; it++;
+					if ( procura_simbolo_const(it) )
+						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
+					it--; it--;
+				}
 				if (!str.compare("DIV"))
 				{
 					it++;

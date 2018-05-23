@@ -28,6 +28,7 @@ typedef struct tabela_simbolo
 {
 	string simbolo;
 	int valor;
+	int is_const;
 } tabela_simbolo;
 
 typedef struct tabela_instrucao
@@ -1494,6 +1495,7 @@ void definir_label(string str, int n_address)
 	tabela_simbolo temp;
 	temp.simbolo = str;
 	temp.valor = n_address;
+	temp.is_const = 0;
 	tabela_simbolo_vector.push_back(temp);
 }
 
@@ -1551,6 +1553,24 @@ void primeira_passagem(string file_in)
 			if (token_vector.size() > 1) //evitar seg fault
 				++it;					 //pega o proximo token da linha do arquivo
 			str = *it;
+
+			if (! str.compare("CONST") )
+			{
+				it--;
+				for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+				{
+					
+					str=*it;
+					str.erase(std::prev(str.end()));
+					if (!str.compare((*it_s).simbolo)) 
+					{
+						(*it_s).is_const = 1;
+						break;
+					}
+				}	
+				it++;	
+				str	= *it;	
+			}
 		}
 		//VERIFICA SE É INSTRUÇÃO
 		for (vector<tabela_instrucao>::iterator it_i = tabela_instrucao_vector.begin(); it_i != tabela_instrucao_vector.end(); ++it_i)
@@ -1596,7 +1616,10 @@ void primeira_passagem(string file_in)
 						}
 					}
 					else
+					{
 						printf("Erro! \n Símbolo não definido. \n Linha: %d \n", n_linha);
+						cout << "String: " << str <<"\n\n\n";
+					}
 				}
 			}
 		}
@@ -1620,6 +1643,24 @@ int procura_simbolo(vector<string>::iterator it)
 	else
 		return -1;
 }
+
+int procura_simbolo_const(vector<string>::iterator it)
+{ //ße existir um tabela de simbolos, percorre ela toda procurando pelo simbolo. retorna -1 caso nao encontre na tabela
+	if (tabela_simbolo_vector.size())
+	{
+		for (vector<tabela_simbolo>::iterator it_s = tabela_simbolo_vector.begin(); it_s != tabela_simbolo_vector.end(); ++it_s)
+		{
+			if (!(*it).compare((*it_s).simbolo))
+			{
+				return (*it_s).is_const;
+			}
+		}
+		return -1;
+	}
+	else
+		return -1;
+}
+
 
 void segunda_passagem(string file_in, string file_out)
 {
@@ -1666,6 +1707,13 @@ void segunda_passagem(string file_in, string file_out)
 		{
 			if (!str.compare((*it_i).mnemonico))
 			{
+				if ( (!str.compare("STORE")) || (!str.compare("INPUT")) )
+				{
+					it++;
+					if ( procura_simbolo_const(it) )
+						printf("Erro! \n Modificação de um valor constante. \n Linha: %d \n", n_linha);
+					it--;
+				}
 				if (distance(it, it_end) != ((*it_i).n_operando + 1))
 				{
 					aux.push_back((*it_i).opcode);
@@ -1876,7 +1924,7 @@ int main(int argc, char *argv[])
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
 		file_in = file_ + ".mcr";
-		string file_out = file_ + ".o"; //todo trocar pra '.o'
+		string file_out = file_ + ".txt"; //todo trocar pra '.o'
 		montagem(file_in, file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}

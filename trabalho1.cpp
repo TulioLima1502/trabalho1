@@ -1,12 +1,17 @@
 //Codigo em C++ do trabalho de Software Basico
 
-// Desenvolvedores: Túlio Mariano da Silva Lima e Débora Ferreira dos Santos
+// Desenvolvedores: Túlio Mariano da Silva Lima (12/0054337) e Débora Ferreira dos Santos (13/0044075)
 
 // Descrição do trabalho 1
-// Objetivos:
-// Funcoes:
+// Macro-Assembler da linguagem assembly hipotética 
 
-// Como compilar
+// *	COMPILAÇÃO
+// *	Linha de comando: $ g++ -std=c++11 trabalho1.cpp -o nome_exe
+
+// *	EXECUÇÃO
+// *	Linha de comando:	$ ./nome_exe -p nome_arquivo_asm nome_arquivo_saida
+// *						$ ./nome_exe -m nome_arquivo_asm nome_arquivo_saida
+// *						$ ./nome_exe -o nome_arquivo_asm nome_arquivo_saida
 
 #include <iostream>
 #include <istream>
@@ -1846,7 +1851,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 								if ((n_linha <= non_global.data) || (non_global.data == -1))
 									aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 								else
-									printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+									printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 							}
 						}
 					}
@@ -1868,7 +1873,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 									if ((n_linha <= non_global.data) || (non_global.data == -1))
 										aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 									else
-										printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+										printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 								}
 							}
 							else
@@ -1895,7 +1900,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 							if ((n_linha <= non_global.data) || (non_global.data == -1))
 								aux.push_back(to_string(symbol_value)); //transforma o valor correspondente do simbolo pra string e coloca no vetor aux
 							else
-								printf("Erro Sintático! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+								printf("Erro Semântico! \n Instrução na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 						}
 					}
 				}
@@ -1930,7 +1935,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 					}
 				}
 				else
-					printf("Erro Sintático! \n Diretiva CONST na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+					printf("Erro Semântico! \n Diretiva CONST na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 			}
 			else
 			{
@@ -1950,7 +1955,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 						}
 					}
 					else
-						printf("Erro Sintático! \n Diretiva SPACE na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
+						printf("Erro Semântico! \n Diretiva SPACE na sessão errada. \n Linha: %d \n", n_linha); //todo corrigir tipo de erro
 				}
 				else
 				{
@@ -1964,7 +1969,7 @@ void segunda_passagem(string file_in, string file_out, auxiliar_data non_global)
 		for (const auto &e : aux)
 			ofile << e << " ";
 		//TODO retirar linha abaixo depois
-		ofile << endl;
+		//ofile << endl;
 
 		++n_linha;
 		token_vector.clear();
@@ -2030,7 +2035,7 @@ int main(int argc, char *argv[])
 		//FUNÇOES DA MONTAGEM
 		string file_ = argv[3];
 		file_in = file_ + ".mcr";
-		string file_out = file_ + ".txt"; //todo trocar pra '.o'
+		string file_out = file_ + ".o"; //todo trocar pra '.o'
 		montagem(file_in, file_out);
 		//Realiza a montagem do código depois de expandir as macros
 	}

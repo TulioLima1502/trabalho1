@@ -1627,7 +1627,12 @@ void primeira_passagem(string file_in)
 						(*it_s).is_const = 1;
 						it++;
 						it++;
-						(*it_s).valor_const = stoi(*it);
+
+						if ((*it).find("0X") == 0)
+							(*it_s).valor_const = retorna_decimal(*it);
+						else
+							(*it_s).valor_const = stoi(*it);
+
 						it--;
 						it--;
 						break;

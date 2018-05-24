@@ -607,10 +607,10 @@ int verifica_argumento_macro(string saida, string argumento)
 			if (mdtbusca.compare(token) == 0)
 			{
 				//agora é necessário descobrir quantos argumentos essa função tem
-				//cout << "Para descobrir a quantidade de argumentos é necessário usar a linha: " << mntbusca << endl;
+				cout << "Para descobrir a quantidade de argumentos é necessário usar a linha: " << mntbusca << endl;
 				num_de_args = mntbusca.substr(mntbusca.find("\t") + 1, mntbusca.size());
-				num_de_args = num_de_args.substr(0, mntbusca.find("\t") - 3);
-				//cout << num_de_args << endl;
+				num_de_args = num_de_args.substr(0,1);
+				cout << num_de_args << endl;
 				//assim eu tenho a quantidade de argumentos mínima que eu tenho que ter na chamada dessa linha
 				n = 0;
 				l = 0;
